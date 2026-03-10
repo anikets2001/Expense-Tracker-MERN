@@ -18,3 +18,49 @@ export const getCategoryClass = (color) => {
   return classes[color] || classes.blue
 }
 
+/**
+ * Get category color based on category name
+ * @param {string} category - Category name
+ * @returns {string} Color name
+ */
+export const getCategoryColor = (category) => {
+  const colorMap = {
+    'Food & Drinks': 'blue',
+    'Transport': 'amber',
+    'Housing': 'primary',
+    'Entertainment': 'purple',
+    'Shopping': 'purple',
+    'Utilities': 'cyan',
+    'Healthcare': 'blue',
+    'Education': 'purple',
+    'Travel': 'amber',
+    'Other': 'cyan'
+  }
+  return colorMap[category] || 'blue'
+}
+
+/**
+ * Format date for display
+ * @param {string|Date} date - Date string or Date object
+ * @returns {string} Formatted date string
+ */
+export const formatDate = (date) => {
+  const dateObj = typeof date === 'string' ? new Date(date) : date
+  return dateObj.toLocaleDateString('en-US', { 
+    year: 'numeric', 
+    month: 'short', 
+    day: 'numeric' 
+  })
+}
+
+/**
+ * Format amount for display
+ * @param {number} amount - Amount value
+ * @returns {string} Formatted amount string with currency symbol
+ */
+export const formatAmount = (amount) => {
+  return `₹${amount.toLocaleString('en-IN', { 
+    minimumFractionDigits: 2, 
+    maximumFractionDigits: 2 
+  })}`
+}

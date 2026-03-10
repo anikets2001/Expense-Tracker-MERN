@@ -1,59 +1,90 @@
 import React, { useState } from 'react'
-import { handleDateChange, handleInputClick } from './helpers'
+import { handleDateChange, handleInputClick, handleSubmit } from './helpers'
 import FormHeader from './subcomponents/FormHeader'
 import FormField from './subcomponents/FormField'
 import SubmitButton from './subcomponents/SubmitButton'
+import { createExpense as createExpenseAPI } from '../../../services/expenseService'
 
-const QuickAddForm = () => {
-  const [date, setDate] = useState('')
+const QuickAddForm = ({ onSuccess }) => {
+  const [formData, setFormData] = useState({
+    amount: '',
+    date: '',
+    category: '',
+    description: ''
+  })
   const [isCalendarOpen, setIsCalendarOpen] = useState(false)
+  const [isLoading, setIsLoading] = useState(false)
+  const [error, setError] = useState(null)
 
   const onDateChange = (newDate) => {
-    handleDateChange(newDate, setDate)
+    handleDateChange(newDate, (date) => {
+      setFormData(prev => ({ ...prev, date }))
+    })
   }
 
   const onInputClick = () => {
     handleInputClick(setIsCalendarOpen)
   }
 
-  const categories = ['Food & Drinks', 'Transport', 'Housing', 'Entertainment', 'Shopping']
+  const onInputChange = (field, value) => {
+    setFormData(prev => ({ ...prev, [field]: value }))
+    // Clear error when user starts typing
+    if (error) setError(null)
+  }
+
+  const onSubmit = async (e) => {
+    await handleSubmit(e, formData, setFormData, setIsLoading, setError, onSuccess, createExpenseAPI)
+  }
+
+  const categories = ['Food & Drinks', 'Transport', 'Housing', 'Entertainment', 'Shopping', 'Utilities', 'Healthcare', 'Education', 'Travel', 'Other']
 
   return (
     <section className="bg-white dark:bg-black rounded-xl border border-[#dbe6df] dark:border-[#2a3a2e] shadow-sm">
       <FormHeader title="Quick Add Expense" />
       <div className="p-4 md:p-6">
-        <form className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
+        <form onSubmit={onSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
           <FormField
             type="number"
             label="Amount (₹)"
-            value=""
-            onChange={() => {}}
+            value={formData.amount}
+            onChange={(value) => onInputChange('amount', value)}
             placeholder="0.00"
+            required
           />
           <FormField
             type="date"
             label="Date"
-            value={date}
+            value={formData.date}
             onChange={onDateChange}
             placeholder="mm/dd/yyyy"
             isCalendarOpen={isCalendarOpen}
             onCalendarToggle={onInputClick}
+            required
           />
           <FormField
             type="select"
             label="Category"
-            value=""
-            onChange={() => {}}
+            value={formData.category}
+            onChange={(value) => onInputChange('category', value)}
             options={categories}
+            required
           />
           <FormField
             type="text"
             label="Description"
-            value=""
-            onChange={() => {}}
+            value={formData.description}
+            onChange={(value) => onInputChange('description', value)}
             placeholder="What did you buy?"
           />
-          <SubmitButton />
+          
+          {/* Error Message */}
+          {error && (
+            <div className="md:col-span-2 p-3 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg">
+              <p className="text-sm text-red-600 dark:text-red-400">{error}</p>
+            </div>
+          )}
+
+          <SubmitButton isLoading={isLoading} className="md:col-span-2" />
         </form>
       </div>
     </section>

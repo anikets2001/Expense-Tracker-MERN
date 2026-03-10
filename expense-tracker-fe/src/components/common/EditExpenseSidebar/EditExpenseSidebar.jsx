@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
-import { handleInputChange, handleSubmit } from './helpers'
-import SidebarHeader from './subcomponents/SidebarHeader'
-import AmountInput from './subcomponents/AmountInput'
-import DateInput from './subcomponents/DateInput'
-import CategorySelect from './subcomponents/CategorySelect'
-import DescriptionTextarea from './subcomponents/DescriptionTextarea'
-import FormActions from './subcomponents/FormActions'
+import { handleInputChange, handleSubmit, formatDateForInput, categories } from './helpers'
+import SidebarHeader from '../AddExpenseSidebar/subcomponents/SidebarHeader'
+import AmountInput from '../AddExpenseSidebar/subcomponents/AmountInput'
+import DateInput from '../AddExpenseSidebar/subcomponents/DateInput'
+import CategorySelect from '../AddExpenseSidebar/subcomponents/CategorySelect'
+import DescriptionTextarea from '../AddExpenseSidebar/subcomponents/DescriptionTextarea'
+import FormActions from '../AddExpenseSidebar/subcomponents/FormActions'
 
-const AddExpenseSidebar = ({ isOpen, onClose, onSuccess }) => {
+const EditExpenseSidebar = ({ isOpen, onClose, expense, onSuccess }) => {
   const [formData, setFormData] = useState({
     amount: '',
     date: '',
@@ -18,6 +18,19 @@ const AddExpenseSidebar = ({ isOpen, onClose, onSuccess }) => {
   const [isCalendarOpen, setIsCalendarOpen] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState(null)
+
+  // Populate form when expense data is available
+  useEffect(() => {
+    if (expense && isOpen) {
+      setFormData({
+        amount: expense.amount || '',
+        date: formatDateForInput(expense.date) || '',
+        category: expense.category || '',
+        description: expense.description || ''
+      })
+      setError(null)
+    }
+  }, [expense, isOpen])
 
   // Prevent body scroll when sidebar is open
   useEffect(() => {
@@ -46,15 +59,14 @@ const AddExpenseSidebar = ({ isOpen, onClose, onSuccess }) => {
   }
 
   const onSubmit = (e) => {
-    handleSubmit(e, formData, setFormData, onClose, setIsLoading, setError, onSuccess)
+    if (expense && expense._id) {
+      handleSubmit(e, expense._id, formData, setFormData, onClose, setIsLoading, setError, onSuccess)
+    }
   }
 
-  // Reset error when sidebar opens/closes
-  useEffect(() => {
-    if (isOpen) {
-      setError(null)
-    }
-  }, [isOpen])
+  if (!expense) {
+    return null
+  }
 
   return (
     <>
@@ -71,7 +83,7 @@ const AddExpenseSidebar = ({ isOpen, onClose, onSuccess }) => {
         isOpen ? 'translate-x-0' : 'translate-x-full'
       }`}>
         <div className="flex flex-col h-full">
-          <SidebarHeader title="Add Expense" onClose={onClose} />
+          <SidebarHeader title="Edit Expense" onClose={onClose} />
 
           <form onSubmit={onSubmit} className="flex-1 p-6 space-y-6">
             <AmountInput
@@ -109,7 +121,11 @@ const AddExpenseSidebar = ({ isOpen, onClose, onSuccess }) => {
               </div>
             )}
 
-            <FormActions onCancel={onClose} isLoading={isLoading} />
+            <FormActions 
+              onCancel={onClose} 
+              isLoading={isLoading}
+              submitLabel="Update Expense"
+            />
           </form>
         </div>
       </div>
@@ -117,10 +133,17 @@ const AddExpenseSidebar = ({ isOpen, onClose, onSuccess }) => {
   )
 }
 
-AddExpenseSidebar.propTypes = {
+EditExpenseSidebar.propTypes = {
   isOpen: PropTypes.bool.isRequired,
   onClose: PropTypes.func.isRequired,
+  expense: PropTypes.shape({
+    _id: PropTypes.string.isRequired,
+    amount: PropTypes.number,
+    date: PropTypes.oneOfType([PropTypes.string, PropTypes.instanceOf(Date)]),
+    category: PropTypes.string,
+    description: PropTypes.string
+  }),
   onSuccess: PropTypes.func
 }
 
-export default AddExpenseSidebar
+export default EditExpenseSidebar
