@@ -1,24 +1,8 @@
 /**
- * AddExpenseSidebar component helper functions
+ * EditExpenseSidebar component helper functions
  */
 
-import { formatDateForDisplay } from '../../../utils/helpers'
-
-/**
- * Categories list for expense form
- */
-export const categories = [
-  'Food & Drinks',
-  'Transport',
-  'Housing',
-  'Entertainment',
-  'Shopping',
-  'Utilities',
-  'Healthcare',
-  'Education',
-  'Travel',
-  'Other'
-]
+import { categories } from '../AddExpenseSidebar/helpers'
 
 /**
  * Handle input field changes
@@ -31,8 +15,23 @@ export const handleInputChange = (field, value, setFormData) => {
 }
 
 /**
- * Handle form submission
+ * Format date for input field (YYYY-MM-DD)
+ * @param {string|Date} date - Date to format
+ * @returns {string} Formatted date string
+ */
+export const formatDateForInput = (date) => {
+  if (!date) return ''
+  const dateObj = typeof date === 'string' ? new Date(date) : date
+  const year = dateObj.getFullYear()
+  const month = String(dateObj.getMonth() + 1).padStart(2, '0')
+  const day = String(dateObj.getDate()).padStart(2, '0')
+  return `${year}-${month}-${day}`
+}
+
+/**
+ * Handle form submission for editing expense
  * @param {Event} e - Form submit event
+ * @param {string} expenseId - Expense ID to update
  * @param {Object} formData - Current form data
  * @param {Function} setFormData - State setter for form data
  * @param {Function} onClose - Callback to close sidebar
@@ -40,7 +39,7 @@ export const handleInputChange = (field, value, setFormData) => {
  * @param {Function} setError - State setter for error message
  * @param {Function} onSuccess - Callback on successful submission
  */
-export const handleSubmit = async (e, formData, setFormData, onClose, setIsLoading, setError, onSuccess) => {
+export const handleSubmit = async (e, expenseId, formData, setFormData, onClose, setIsLoading, setError, onSuccess) => {
   e.preventDefault()
   
   // Validate required fields
@@ -53,7 +52,7 @@ export const handleSubmit = async (e, formData, setFormData, onClose, setIsLoadi
   setError(null)
 
   try {
-    const { createExpense } = await import('../../../services/expenseService')
+    const { updateExpense } = await import('../../../services/expenseService')
     
     // Prepare data for API
     const expenseData = {
@@ -63,17 +62,9 @@ export const handleSubmit = async (e, formData, setFormData, onClose, setIsLoadi
       description: formData.description || ''
     }
 
-    const response = await createExpense(expenseData)
+    const response = await updateExpense(expenseId, expenseData)
 
     if (response.success) {
-      // Reset form
-      setFormData({
-        amount: '',
-        date: '',
-        category: '',
-        description: ''
-      })
-      
       // Call success callback if provided
       if (onSuccess) {
         onSuccess(response.data.expense)
@@ -82,12 +73,11 @@ export const handleSubmit = async (e, formData, setFormData, onClose, setIsLoadi
       onClose()
     }
   } catch (error) {
-    setError(error.message || 'Failed to create expense. Please try again.')
+    setError(error.message || 'Failed to update expense. Please try again.')
   } finally {
     setIsLoading(false)
   }
 }
 
-// Re-export formatDateForDisplay for convenience
-export { formatDateForDisplay }
-
+// Re-export categories
+export { categories }

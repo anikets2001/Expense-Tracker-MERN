@@ -22,9 +22,8 @@ app.get('/', (req, res) => {
   res.json({ message: 'Expense Tracker API is running!' });
 });
 
-// API Routes will be added here later
-// app.use('/api/auth', require('./src/routes/authRoutes'));
-// app.use('/api/expenses', require('./src/routes/expenseRoutes'));
+// API Routes
+app.use('/api/expenses', require('./src/routes/expenseRoutes'));
 
 // Error handling middleware
 app.use((err, req, res, next) => {

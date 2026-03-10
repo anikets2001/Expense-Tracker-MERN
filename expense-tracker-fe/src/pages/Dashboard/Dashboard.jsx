@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useRef } from 'react'
 import Sidebar from '../../components/layout/Sidebar/Sidebar'
 import Topbar from '../../components/layout/Topbar/Topbar'
 import StatsRow from '../../components/dashboard/StatsRow/StatsRow'
@@ -9,6 +9,14 @@ import SavingsGoal from '../../components/dashboard/SavingsGoal/SavingsGoal'
 
 const Dashboard = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false)
+  const transactionsTableRef = useRef(null)
+
+  const handleExpenseAdded = () => {
+    // Refresh transactions table when expense is added
+    if (transactionsTableRef.current) {
+      transactionsTableRef.current.refresh()
+    }
+  }
 
   return (
     <div className="flex h-screen overflow-hidden">
@@ -22,8 +30,8 @@ const Dashboard = () => {
 
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
             <div className="lg:col-span-7 space-y-8">
-              <QuickAddForm />
-              <TransactionsTable />
+              <QuickAddForm onSuccess={handleExpenseAdded} />
+              <TransactionsTable ref={transactionsTableRef} />
             </div>
 
             <div className="lg:col-span-5 space-y-8">

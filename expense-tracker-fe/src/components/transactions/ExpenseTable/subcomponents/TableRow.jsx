@@ -2,7 +2,19 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { getCategoryClass } from '../helpers'
 
-const TableRow = ({ transaction, index }) => {
+const TableRow = ({ transaction, expense, index, onEdit, onDelete }) => {
+  const handleEditClick = () => {
+    if (onEdit && expense) {
+      onEdit(expense)
+    }
+  }
+
+  const handleDeleteClick = () => {
+    if (onDelete && expense && expense._id) {
+      onDelete(expense._id)
+    }
+  }
+
   return (
     <tr key={index} className="hover:bg-[#f0f4f2]/30 dark:hover:bg-white/5 transition-colors group">
       <td className="px-3 md:px-6 py-4 text-xs md:text-sm font-medium text-[#111813] dark:text-white">{transaction.date}</td>
@@ -22,10 +34,18 @@ const TableRow = ({ transaction, index }) => {
       <td className="px-3 md:px-6 py-4 text-xs md:text-sm font-bold text-right text-[#111813] dark:text-white">{transaction.amount}</td>
       <td className="px-3 md:px-6 py-4 hidden md:table-cell">
         <div className="flex justify-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-          <button className="cursor-pointer p-1.5 rounded hover:bg-black/5 dark:hover:bg-white/10 text-[#61896f] hover:text-[#111813] dark:hover:text-white">
+          <button 
+            onClick={handleEditClick}
+            className="cursor-pointer p-1.5 rounded hover:bg-black/5 dark:hover:bg-white/10 text-[#61896f] hover:text-[#111813] dark:hover:text-white"
+            title="Edit expense"
+          >
             <span className="material-symbols-outlined text-lg">edit</span>
           </button>
-          <button className="cursor-pointer p-1.5 rounded hover:bg-red-50 text-[#61896f] hover:text-red-500">
+          <button 
+            onClick={handleDeleteClick}
+            className="cursor-pointer p-1.5 rounded hover:bg-red-50 text-[#61896f] hover:text-red-500" 
+            title="Delete expense"
+          >
             <span className="material-symbols-outlined text-lg">delete</span>
           </button>
         </div>
@@ -42,7 +62,10 @@ TableRow.propTypes = {
     description: PropTypes.string.isRequired,
     amount: PropTypes.string.isRequired
   }).isRequired,
-  index: PropTypes.number.isRequired
+  expense: PropTypes.object,
+  index: PropTypes.number.isRequired,
+  onEdit: PropTypes.func,
+  onDelete: PropTypes.func
 }
 
 export default TableRow
