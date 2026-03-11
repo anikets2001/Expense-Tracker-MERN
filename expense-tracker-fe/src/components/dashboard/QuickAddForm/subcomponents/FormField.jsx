@@ -13,6 +13,7 @@ const FormField = ({
   options = [],
   isCalendarOpen = false,
   onCalendarToggle,
+  onCalendarClose,
   className = ""
 }) => {
   const baseInputClasses = "w-full px-4 py-3 bg-[#f0f4f2] dark:bg-[#1a2e1e] border border-[#dbe6df] dark:border-[#2a3a2e] rounded-lg focus:ring-2 focus:ring-primary focus:border-primary transition-all text-[#111813] dark:text-white placeholder:text-[#61896f]"
@@ -51,7 +52,7 @@ const FormField = ({
               value={value}
               onChange={onChange}
               isOpen={isCalendarOpen}
-              onClose={onCalendarToggle}
+              onClose={onCalendarClose || onCalendarToggle}
             />
           )}
         </div>
@@ -79,6 +80,7 @@ FormField.propTypes = {
   options: PropTypes.arrayOf(PropTypes.string),
   isCalendarOpen: PropTypes.bool,
   onCalendarToggle: PropTypes.func,
+  onCalendarClose: PropTypes.func,
   className: PropTypes.string
 }
 

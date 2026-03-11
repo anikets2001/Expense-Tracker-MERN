@@ -31,16 +31,16 @@ export const handleInputChange = (field, value, setFormData) => {
 }
 
 /**
- * Handle form submission
+ * Handle form submission using RTK Query mutation
  * @param {Event} e - Form submit event
  * @param {Object} formData - Current form data
  * @param {Function} setFormData - State setter for form data
  * @param {Function} onClose - Callback to close sidebar
- * @param {Function} setIsLoading - State setter for loading state
  * @param {Function} setError - State setter for error message
  * @param {Function} onSuccess - Callback on successful submission
+ * @param {Function} createExpenseMutation - RTK Query mutation function
  */
-export const handleSubmit = async (e, formData, setFormData, onClose, setIsLoading, setError, onSuccess) => {
+export const handleSubmit = async (e, formData, setFormData, onClose, setError, onSuccess, createExpenseMutation) => {
   e.preventDefault()
   
   // Validate required fields
@@ -49,12 +49,9 @@ export const handleSubmit = async (e, formData, setFormData, onClose, setIsLoadi
     return
   }
 
-  setIsLoading(true)
   setError(null)
 
   try {
-    const { createExpense } = await import('../../../services/expenseService')
-    
     // Prepare data for API
     const expenseData = {
       amount: parseFloat(formData.amount),
@@ -63,7 +60,7 @@ export const handleSubmit = async (e, formData, setFormData, onClose, setIsLoadi
       description: formData.description || ''
     }
 
-    const response = await createExpense(expenseData)
+    const response = await createExpenseMutation(expenseData).unwrap()
 
     if (response.success) {
       // Reset form
@@ -82,9 +79,7 @@ export const handleSubmit = async (e, formData, setFormData, onClose, setIsLoadi
       onClose()
     }
   } catch (error) {
-    setError(error.message || 'Failed to create expense. Please try again.')
-  } finally {
-    setIsLoading(false)
+    setError(error?.data?.message || error?.message || 'Failed to create expense. Please try again.')
   }
 }
 

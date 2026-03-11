@@ -29,17 +29,16 @@ export const formatDateForInput = (date) => {
 }
 
 /**
- * Handle form submission for editing expense
+ * Handle form submission for editing expense using RTK Query mutation
  * @param {Event} e - Form submit event
  * @param {string} expenseId - Expense ID to update
  * @param {Object} formData - Current form data
- * @param {Function} setFormData - State setter for form data
  * @param {Function} onClose - Callback to close sidebar
- * @param {Function} setIsLoading - State setter for loading state
  * @param {Function} setError - State setter for error message
  * @param {Function} onSuccess - Callback on successful submission
+ * @param {Function} updateExpenseMutation - RTK Query mutation function
  */
-export const handleSubmit = async (e, expenseId, formData, setFormData, onClose, setIsLoading, setError, onSuccess) => {
+export const handleSubmit = async (e, expenseId, formData, onClose, setError, onSuccess, updateExpenseMutation) => {
   e.preventDefault()
   
   // Validate required fields
@@ -48,12 +47,9 @@ export const handleSubmit = async (e, expenseId, formData, setFormData, onClose,
     return
   }
 
-  setIsLoading(true)
   setError(null)
 
   try {
-    const { updateExpense } = await import('../../../services/expenseService')
-    
     // Prepare data for API
     const expenseData = {
       amount: parseFloat(formData.amount),
@@ -62,7 +58,7 @@ export const handleSubmit = async (e, expenseId, formData, setFormData, onClose,
       description: formData.description || ''
     }
 
-    const response = await updateExpense(expenseId, expenseData)
+    const response = await updateExpenseMutation({ id: expenseId, ...expenseData }).unwrap()
 
     if (response.success) {
       // Call success callback if provided
@@ -73,9 +69,7 @@ export const handleSubmit = async (e, expenseId, formData, setFormData, onClose,
       onClose()
     }
   } catch (error) {
-    setError(error.message || 'Failed to update expense. Please try again.')
-  } finally {
-    setIsLoading(false)
+    setError(error?.data?.message || error?.message || 'Failed to update expense. Please try again.')
   }
 }
 

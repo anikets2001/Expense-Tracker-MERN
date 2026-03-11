@@ -1,43 +1,23 @@
-import React, { useState, useEffect, useImperativeHandle, forwardRef } from "react";
+import React, { useImperativeHandle, forwardRef } from "react";
 import { Link } from "react-router-dom";
-import { getExpenses } from "../../../services/expenseService";
+import { useGetExpensesQuery } from "../../../redux/services/expensesApis";
 import { formatDate, formatAmount, getCategoryColor, getCategoryClass } from "../../transactions/ExpenseTable/helpers";
 
 const TransactionsTable = forwardRef((props, ref) => {
-  const [expenses, setExpenses] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState(null);
+  // RTK Query hook
+  const { data, isLoading, error, refetch } = useGetExpensesQuery({ 
+    limit: 5, 
+    sortBy: '-date' 
+  });
 
-  useEffect(() => {
-    fetchRecentExpenses();
-  }, []);
+  const expenses = data?.data?.expenses || [];
 
   // Expose refresh method to parent component
   useImperativeHandle(ref, () => ({
     refresh: () => {
-      fetchRecentExpenses();
+      refetch();
     }
   }));
-
-  const fetchRecentExpenses = async () => {
-    try {
-      setIsLoading(true);
-      setError(null);
-      const response = await getExpenses({ 
-        limit: 5, 
-        sortBy: '-date' 
-      });
-      
-      if (response.success) {
-        setExpenses(response.data.expenses);
-      }
-    } catch (err) {
-      setError(err.message);
-      console.error('Error fetching expenses:', err);
-    } finally {
-      setIsLoading(false);
-    }
-  };
 
   const getCategoryIcon = (category) => {
     const iconMap = {
@@ -69,9 +49,11 @@ const TransactionsTable = forwardRef((props, ref) => {
           </div>
         ) : error ? (
           <div className="p-8 text-center">
-            <p className="text-sm text-red-600 dark:text-red-400">{error}</p>
+            <p className="text-sm text-red-600 dark:text-red-400">
+              {error?.data?.message || error?.message || 'Failed to load transactions'}
+            </p>
             <button 
-              onClick={fetchRecentExpenses}
+              onClick={() => refetch()}
               className="mt-2 text-sm text-primary hover:underline"
             >
               Try again

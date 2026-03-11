@@ -1,9 +1,9 @@
 import React, { useState } from 'react'
+import { useCreateExpenseMutation } from '../../../redux/services/expensesApis'
 import { handleDateChange, handleInputClick, handleSubmit } from './helpers'
 import FormHeader from './subcomponents/FormHeader'
 import FormField from './subcomponents/FormField'
 import SubmitButton from './subcomponents/SubmitButton'
-import { createExpense as createExpenseAPI } from '../../../services/expenseService'
 
 const QuickAddForm = ({ onSuccess }) => {
   const [formData, setFormData] = useState({
@@ -13,12 +13,15 @@ const QuickAddForm = ({ onSuccess }) => {
     description: ''
   })
   const [isCalendarOpen, setIsCalendarOpen] = useState(false)
-  const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState(null)
+  
+  // RTK Query mutation
+  const [createExpense, { isLoading }] = useCreateExpenseMutation()
 
   const onDateChange = (newDate) => {
     handleDateChange(newDate, (date) => {
       setFormData(prev => ({ ...prev, date }))
+      setIsCalendarOpen(false) // Close calendar when date is selected
     })
   }
 
@@ -33,7 +36,7 @@ const QuickAddForm = ({ onSuccess }) => {
   }
 
   const onSubmit = async (e) => {
-    await handleSubmit(e, formData, setFormData, setIsLoading, setError, onSuccess, createExpenseAPI)
+    await handleSubmit(e, formData, setFormData, setError, onSuccess, createExpense)
   }
 
   const categories = ['Food & Drinks', 'Transport', 'Housing', 'Entertainment', 'Shopping', 'Utilities', 'Healthcare', 'Education', 'Travel', 'Other']
@@ -59,6 +62,7 @@ const QuickAddForm = ({ onSuccess }) => {
             placeholder="mm/dd/yyyy"
             isCalendarOpen={isCalendarOpen}
             onCalendarToggle={onInputClick}
+            onCalendarClose={() => setIsCalendarOpen(false)}
             required
           />
           <FormField

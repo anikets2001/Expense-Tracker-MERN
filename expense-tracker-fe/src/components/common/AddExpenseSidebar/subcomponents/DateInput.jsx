@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import Calendar from '../../Calendar/Calendar'
 import { formatDateForDisplay } from '../../../../utils/helpers'
 
-const DateInput = ({ value, onChange, isCalendarOpen, onCalendarToggle, required = false }) => {
+const DateInput = ({ value, onChange, isCalendarOpen, onCalendarToggle, onCalendarClose, required = false }) => {
   return (
     <div className="space-y-1.5">
       <label className="text-sm font-bold text-[#111813] dark:text-white">
@@ -27,7 +27,7 @@ const DateInput = ({ value, onChange, isCalendarOpen, onCalendarToggle, required
               value={value}
               onChange={onChange}
               isOpen={isCalendarOpen}
-              onClose={onCalendarToggle}
+              onClose={onCalendarClose || onCalendarToggle}
             />
           </div>
         )}
@@ -41,6 +41,7 @@ DateInput.propTypes = {
   onChange: PropTypes.func.isRequired,
   isCalendarOpen: PropTypes.bool.isRequired,
   onCalendarToggle: PropTypes.func.isRequired,
+  onCalendarClose: PropTypes.func,
   required: PropTypes.bool
 }
 

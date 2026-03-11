@@ -1,7 +1,7 @@
 const Expense = require('../models/Expense');
 
 // @desc    Get all expenses
-// @route   GET /api/expenses
+// @route   GET 
 // @access  Public (no auth for now)
 exports.getExpenses = async (req, res) => {
   try {
@@ -211,6 +211,103 @@ exports.deleteExpense = async (req, res) => {
     res.status(500).json({
       success: false,
       message: error.message || 'Server error while deleting expense'
+    });
+  }
+};
+
+// @desc    Get expense statistics
+// @route   GET /api/expenses/stats
+// @access  Public (no auth for now)
+exports.getExpenseStats = async (req, res) => {
+  try {
+    const { startDate, endDate } = req.query;
+
+    // Build query
+    const query = {};
+
+    if (startDate || endDate) {
+      query.date = {};
+      if (startDate) {
+        query.date.$gte = new Date(startDate);
+      }
+      if (endDate) {
+        query.date.$lte = new Date(endDate);
+      }
+    }
+
+    // Get all expenses for stats calculation
+    const expenses = await Expense.find(query).lean();
+
+    // Calculate statistics
+    const totalSpent = expenses.reduce((sum, exp) => sum + exp.amount, 0);
+    const transactionCount = expenses.length;
+    
+    // Calculate daily average
+    // If there are expenses, calculate average per day based on date range
+    let dailyAverage = 0;
+    if (expenses.length > 0) {
+      if (startDate && endDate) {
+        // Calculate days between start and end date
+        const start = new Date(startDate);
+        const end = new Date(endDate);
+        const daysDiff = Math.ceil((end - start) / (1000 * 60 * 60 * 24)) + 1; // +1 to include both start and end days
+        dailyAverage = daysDiff > 0 ? totalSpent / daysDiff : totalSpent;
+      } else {
+        // If no date range, calculate based on expense dates
+        const dates = expenses.map(exp => new Date(exp.date).toDateString());
+        const uniqueDays = new Set(dates).size;
+        dailyAverage = uniqueDays > 0 ? totalSpent / uniqueDays : totalSpent;
+      }
+    }
+
+    // Calculate category statistics
+    const categoryStatsMap = {};
+    
+    expenses.forEach(expense => {
+      const category = expense.category;
+      if (!categoryStatsMap[category]) {
+        categoryStatsMap[category] = {
+          category,
+          total: 0,
+          count: 0
+        };
+      }
+      categoryStatsMap[category].total += expense.amount;
+      categoryStatsMap[category].count += 1;
+    });
+
+    // Convert to array and calculate percentages
+    const categoryStats = Object.values(categoryStatsMap).map(stat => ({
+      category: stat.category,
+      total: parseFloat(stat.total.toFixed(2)),
+      count: stat.count,
+      percentage: totalSpent > 0 ? parseFloat(((stat.total / totalSpent) * 100).toFixed(2)) : 0
+    }));
+
+    // Sort by total (descending)
+    categoryStats.sort((a, b) => b.total - a.total);
+
+    // Find top category
+    const topCategory = categoryStats.length > 0 ? {
+      category: categoryStats[0].category,
+      total: categoryStats[0].total,
+      percentage: categoryStats[0].percentage
+    } : null;
+
+    res.status(200).json({
+      success: true,
+      data: {
+        totalSpent: parseFloat(totalSpent.toFixed(2)),
+        transactionCount,
+        dailyAverage: parseFloat(dailyAverage.toFixed(2)),
+        topCategory,
+        categoryStats
+      }
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error.message || 'Server error while fetching statistics'
     });
   }
 };
