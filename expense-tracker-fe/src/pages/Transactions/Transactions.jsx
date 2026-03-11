@@ -6,8 +6,17 @@ import ExpenseTable from '../../components/transactions/ExpenseTable/ExpenseTabl
 import Pagination from '../../components/transactions/Pagination/Pagination'
 import Sidebar from '../../components/layout/Sidebar/Sidebar'
 import Topbar from '../../components/layout/Topbar/Topbar'
+import { useGetExpenseStatsQuery } from '../../redux/services/expensesApis'
 
 const Transactions = () => {
+  const { data, isLoading: isLoadingStats, error: errorStats } = useGetExpenseStatsQuery()
+
+  const stats = data?.data || {
+    totalSpent: 0,
+    transactionCount: 0,
+    dailyAverage: 0
+  }
+
   const [isSidebarOpen, setIsSidebarOpen] = useState(false)
 
   return (
@@ -15,9 +24,9 @@ const Transactions = () => {
       <Sidebar isOpen={isSidebarOpen} onClose={() => setIsSidebarOpen(false)} />
       <main className="flex-1 flex flex-col">
         <Topbar title={'Transactions'} onMenuClick={() => setIsSidebarOpen(true)} />
-        <PageHeading />
+        <PageHeading transactionCount={stats.transactionCount} />
         <div className="px-4 md:px-6 lg:px-8 pb-4 md:pb-6 lg:pb-8 space-y-4 md:space-y-6">
-          <Stats />
+          <Stats stats={stats} isLoading={isLoadingStats} error={errorStats}/>
           <Filters />
           <ExpenseTable />
           <Pagination />

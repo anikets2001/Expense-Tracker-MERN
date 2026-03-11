@@ -1,86 +1,39 @@
-import React, { useState, useEffect, useRef } from 'react'
-import { getExpenses } from '../../../services/expenseService'
+import React, { useState, useMemo } from 'react'
+import { useGetExpensesQuery, useDeleteExpenseMutation } from '../../../redux/services/expensesApis'
 import { formatDate, formatAmount, getCategoryColor } from './helpers'
 import TableHeader from './subcomponents/TableHeader'
 import TableRow from './subcomponents/TableRow'
 import EditExpenseSidebar from '../../common/EditExpenseSidebar/EditExpenseSidebar'
 
 const ExpenseTable = ({ filters = {} }) => {
-  const [expenses, setExpenses] = useState([])
-  const [isLoading, setIsLoading] = useState(true)
-  const [error, setError] = useState(null)
-  const [pagination, setPagination] = useState({
+  const [currentPage, setCurrentPage] = useState(1)
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false)
+  const [selectedExpense, setSelectedExpense] = useState(null)
+  
+  // Build query parameters
+  const queryParams = useMemo(() => ({
+    page: currentPage,
+    limit: 10,
+    sortBy: '-date',
+    ...filters
+  }), [currentPage, filters])
+
+  // RTK Query hooks
+  const { data, isLoading, error, refetch } = useGetExpensesQuery(queryParams)
+  const [deleteExpense, { isLoading: isDeleting }] = useDeleteExpenseMutation()
+
+  const expenses = data?.data?.expenses || []
+  const pagination = data?.data?.pagination || {
     currentPage: 1,
     totalPages: 1,
     totalItems: 0,
     itemsPerPage: 10
-  })
-  
-  // Use ref to track previous filters and prevent infinite loop
-  const prevFiltersRef = useRef(JSON.stringify(filters))
-  const isInitialMount = useRef(true)
-  const isFetchingRef = useRef(false)
-  
-  // Edit modal state
-  const [isEditModalOpen, setIsEditModalOpen] = useState(false)
-  const [selectedExpense, setSelectedExpense] = useState(null)
-
-  useEffect(() => {
-    // Only fetch on mount or when filters actually change
-    const currentFilters = JSON.stringify(filters)
-    
-    if (isInitialMount.current) {
-      isInitialMount.current = false
-      fetchExpenses(1)
-    } else if (prevFiltersRef.current !== currentFilters) {
-      prevFiltersRef.current = currentFilters
-      fetchExpenses(1)
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [filters])
-
-  const fetchExpenses = async (page = 1) => {
-    // Prevent multiple simultaneous requests
-    if (isFetchingRef.current) return
-    
-    isFetchingRef.current = true
-    
-    try {
-      setIsLoading(true)
-      setError(null)
-      
-      const params = {
-        page,
-        limit: 10,
-        sortBy: '-date',
-        ...filters
-      }
-
-      const response = await getExpenses(params)
-      
-      if (response.success) {
-        setExpenses(response.data.expenses)
-        setPagination(response.data.pagination)
-      }
-    } catch (err) {
-      setError(err.message)
-      console.error('Error fetching expenses:', err)
-    } finally {
-      setIsLoading(false)
-      isFetchingRef.current = false
-    }
   }
 
   // Handle edit button click
   const handleEdit = (expense) => {
     setSelectedExpense(expense)
     setIsEditModalOpen(true)
-  }
-
-  // Handle successful update
-  const handleUpdateSuccess = () => {
-    // Refresh expenses after update
-    fetchExpenses(pagination.currentPage)
   }
 
   // Handle delete button click
@@ -93,15 +46,9 @@ const ExpenseTable = ({ filters = {} }) => {
     }
 
     try {
-      const { deleteExpense } = await import('../../../services/expenseService')
-      const response = await deleteExpense(expenseId)
-      
-      if (response.success) {
-        // Refresh expenses after deletion
-        fetchExpenses(pagination.currentPage)
-      }
+      await deleteExpense(expenseId).unwrap()
     } catch (error) {
-      alert(error.message || 'Failed to delete expense. Please try again.')
+      alert(error?.data?.message || error?.message || 'Failed to delete expense. Please try again.')
       console.error('Error deleting expense:', error)
     }
   }
@@ -129,9 +76,11 @@ const ExpenseTable = ({ filters = {} }) => {
             </div>
           ) : error ? (
             <div className="p-12 text-center">
-              <p className="text-sm text-red-600 dark:text-red-400">{error}</p>
+              <p className="text-sm text-red-600 dark:text-red-400">
+                {error?.data?.message || error?.message || 'Failed to load expenses'}
+              </p>
               <button 
-                onClick={() => fetchExpenses(pagination.currentPage)}
+                onClick={() => refetch()}
                 className="mt-2 text-sm text-primary hover:underline"
               >
                 Try again
@@ -169,7 +118,6 @@ const ExpenseTable = ({ filters = {} }) => {
           setSelectedExpense(null)
         }}
         expense={selectedExpense}
-        onSuccess={handleUpdateSuccess}
       />
     </div>
   )

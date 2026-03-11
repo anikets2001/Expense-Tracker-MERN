@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
+import { useCreateExpenseMutation } from '../../../redux/services/expensesApis'
 import { handleInputChange, handleSubmit } from './helpers'
 import SidebarHeader from './subcomponents/SidebarHeader'
 import AmountInput from './subcomponents/AmountInput'
@@ -16,8 +17,10 @@ const AddExpenseSidebar = ({ isOpen, onClose, onSuccess }) => {
     description: ''
   })
   const [isCalendarOpen, setIsCalendarOpen] = useState(false)
-  const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState(null)
+  
+  // RTK Query mutation
+  const [createExpense, { isLoading }] = useCreateExpenseMutation()
 
   // Prevent body scroll when sidebar is open
   useEffect(() => {
@@ -46,7 +49,7 @@ const AddExpenseSidebar = ({ isOpen, onClose, onSuccess }) => {
   }
 
   const onSubmit = (e) => {
-    handleSubmit(e, formData, setFormData, onClose, setIsLoading, setError, onSuccess)
+    handleSubmit(e, formData, setFormData, onClose, setError, onSuccess, createExpense)
   }
 
   // Reset error when sidebar opens/closes
@@ -84,10 +87,10 @@ const AddExpenseSidebar = ({ isOpen, onClose, onSuccess }) => {
               value={formData.date}
               onChange={(date) => {
                 onInputChange('date', date)
-                setIsCalendarOpen(false)
               }}
               isCalendarOpen={isCalendarOpen}
               onCalendarToggle={() => setIsCalendarOpen(!isCalendarOpen)}
+              onCalendarClose={() => setIsCalendarOpen(false)}
               required
             />
 

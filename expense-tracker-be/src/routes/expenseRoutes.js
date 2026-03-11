@@ -1,9 +1,12 @@
 const express = require('express');
 const router = express.Router();
-const { getExpenses, getExpense, createExpense, updateExpense, deleteExpense } = require('../controllers/expenseController');
+const { getExpenses, getExpense, createExpense, updateExpense, deleteExpense, getExpenseStats } = require('../controllers/expenseController');
 
 // GET /api/expenses - Get all expenses
 router.get('/', getExpenses);
+
+// GET /api/expenses/stats - Get expense statistics
+router.get('/stats', getExpenseStats);
 
 // POST /api/expenses - Create new expense
 router.post('/', createExpense);

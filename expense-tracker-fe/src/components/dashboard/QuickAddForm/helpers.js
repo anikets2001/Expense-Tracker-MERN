@@ -22,16 +22,15 @@ export const handleInputClick = (setIsCalendarOpen) => {
 }
 
 /**
- * Handle form submission
+ * Handle form submission using RTK Query mutation
  * @param {Event} e - Form submit event
  * @param {Object} formData - Current form data
  * @param {Function} setFormData - State setter for form data
- * @param {Function} setIsLoading - State setter for loading state
  * @param {Function} setError - State setter for error message
  * @param {Function} onSuccess - Callback on successful submission
- * @param {Function} createExpense - API function to create expense
+ * @param {Function} createExpenseMutation - RTK Query mutation function
  */
-export const handleSubmit = async (e, formData, setFormData, setIsLoading, setError, onSuccess, createExpense) => {
+export const handleSubmit = async (e, formData, setFormData, setError, onSuccess, createExpenseMutation) => {
   e.preventDefault()
   
   // Validate required fields
@@ -40,7 +39,6 @@ export const handleSubmit = async (e, formData, setFormData, setIsLoading, setEr
     return
   }
 
-  setIsLoading(true)
   setError(null)
 
   try {
@@ -52,7 +50,7 @@ export const handleSubmit = async (e, formData, setFormData, setIsLoading, setEr
       description: formData.description || ''
     }
 
-    const response = await createExpense(expenseData)
+    const response = await createExpenseMutation(expenseData).unwrap()
 
     if (response.success) {
       // Reset form
@@ -69,9 +67,7 @@ export const handleSubmit = async (e, formData, setFormData, setIsLoading, setEr
       }
     }
   } catch (error) {
-    setError(error.message || 'Failed to create expense. Please try again.')
-  } finally {
-    setIsLoading(false)
+    setError(error?.data?.message || error?.message || 'Failed to create expense. Please try again.')
   }
 }
 

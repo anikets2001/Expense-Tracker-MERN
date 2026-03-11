@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
+import { useUpdateExpenseMutation } from '../../../redux/services/expensesApis'
 import { handleInputChange, handleSubmit, formatDateForInput, categories } from './helpers'
 import SidebarHeader from '../AddExpenseSidebar/subcomponents/SidebarHeader'
 import AmountInput from '../AddExpenseSidebar/subcomponents/AmountInput'
@@ -16,8 +17,10 @@ const EditExpenseSidebar = ({ isOpen, onClose, expense, onSuccess }) => {
     description: ''
   })
   const [isCalendarOpen, setIsCalendarOpen] = useState(false)
-  const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState(null)
+  
+  // RTK Query mutation
+  const [updateExpense, { isLoading }] = useUpdateExpenseMutation()
 
   // Populate form when expense data is available
   useEffect(() => {
@@ -60,7 +63,7 @@ const EditExpenseSidebar = ({ isOpen, onClose, expense, onSuccess }) => {
 
   const onSubmit = (e) => {
     if (expense && expense._id) {
-      handleSubmit(e, expense._id, formData, setFormData, onClose, setIsLoading, setError, onSuccess)
+      handleSubmit(e, expense._id, formData, onClose, setError, onSuccess, updateExpense)
     }
   }
 
@@ -96,10 +99,10 @@ const EditExpenseSidebar = ({ isOpen, onClose, expense, onSuccess }) => {
               value={formData.date}
               onChange={(date) => {
                 onInputChange('date', date)
-                setIsCalendarOpen(false)
               }}
               isCalendarOpen={isCalendarOpen}
               onCalendarToggle={() => setIsCalendarOpen(!isCalendarOpen)}
+              onCalendarClose={() => setIsCalendarOpen(false)}
               required
             />
 
