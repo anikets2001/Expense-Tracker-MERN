@@ -5,7 +5,7 @@ const Expense = require('../models/Expense');
 // @access  Public (no auth for now)
 exports.getExpenses = async (req, res) => {
   try {
-    const { page = 1, limit = 10, category, startDate, endDate, sortBy = '-date' } = req.query;
+    const { page = 1, limit = 10, category, startDate, endDate, sortBy = '-date', search, minAmount, maxAmount } = req.query;
 
     // Build query
     const query = {};
@@ -22,6 +22,26 @@ exports.getExpenses = async (req, res) => {
       if (endDate) {
         query.date.$lte = new Date(endDate);
       }
+    }
+
+    // Add amount range filtering
+    if (minAmount || maxAmount) {
+      query.amount = {};
+      if (minAmount) {
+        query.amount.$gte = parseFloat(minAmount);
+      }
+      if (maxAmount) {
+        query.amount.$lte = parseFloat(maxAmount);
+      }
+    }
+
+    // Add search functionality - search in description and category
+    if (search && search.trim()) {
+      const searchRegex = new RegExp(search.trim(), 'i'); // Case-insensitive search
+      query.$or = [
+        { description: searchRegex },
+        { category: searchRegex }
+      ];
     }
 
     // Calculate pagination

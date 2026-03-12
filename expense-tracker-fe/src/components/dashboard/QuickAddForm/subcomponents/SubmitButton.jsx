@@ -1,5 +1,4 @@
 import React from 'react'
-import PropTypes from 'prop-types'
 
 const SubmitButton = ({ label = "Add Expense", className = "", isLoading = false }) => {
   return (
@@ -23,12 +22,6 @@ const SubmitButton = ({ label = "Add Expense", className = "", isLoading = false
       </button>
     </div>
   )
-}
-
-SubmitButton.propTypes = {
-  label: PropTypes.string,
-  className: PropTypes.string,
-  isLoading: PropTypes.bool
 }
 
 export default SubmitButton

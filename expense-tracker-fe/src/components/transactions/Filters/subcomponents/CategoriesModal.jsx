@@ -1,5 +1,4 @@
 import React from 'react'
-import PropTypes from 'prop-types'
 import { categories } from '../../Filters/config'
 
 const CategoriesModal = ({ isOpen, selectedCategories, onToggleCategory, onClose, className = "" }) => {
@@ -42,14 +41,6 @@ const CategoriesModal = ({ isOpen, selectedCategories, onToggleCategory, onClose
       </div>
     </div>
   )
-}
-
-CategoriesModal.propTypes = {
-  isOpen: PropTypes.bool.isRequired,
-  selectedCategories: PropTypes.arrayOf(PropTypes.string).isRequired,
-  onToggleCategory: PropTypes.func.isRequired,
-  onClose: PropTypes.func.isRequired,
-  className: PropTypes.string
 }
 
 export default CategoriesModal

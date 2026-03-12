@@ -1,5 +1,4 @@
 import React from 'react'
-import PropTypes from 'prop-types'
 
 const AmountInput = ({ value, onChange, required = false }) => {
   return (
@@ -18,12 +17,6 @@ const AmountInput = ({ value, onChange, required = false }) => {
       />
     </div>
   )
-}
-
-AmountInput.propTypes = {
-  value: PropTypes.string.isRequired,
-  onChange: PropTypes.func.isRequired,
-  required: PropTypes.bool
 }
 
 export default AmountInput

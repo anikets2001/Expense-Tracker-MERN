@@ -8,16 +8,24 @@ import CategoriesModal from './subcomponents/CategoriesModal'
 import AmountModal from './subcomponents/AmountModal'
 import AppliedFilters from './subcomponents/AppliedFilters'
 
-const Filters = () => {
+const Filters = ({
+  search = '',
+  onSearchChange,
+  startDate = '',
+  onStartDateChange,
+  endDate = '',
+  onEndDateChange,
+  selectedCategories = [],
+  onCategoriesChange,
+  minAmount = '',
+  onMinAmountChange,
+  maxAmount = '',
+  onMaxAmountChange,
+  onFiltersChange
+}) => {
   const [isDateRangeOpen, setIsDateRangeOpen] = useState(false)
   const [isCategoriesOpen, setIsCategoriesOpen] = useState(false)
   const [isAmountOpen, setIsAmountOpen] = useState(false)
-  
-  const [startDate, setStartDate] = useState('')
-  const [endDate, setEndDate] = useState('')
-  const [selectedCategories, setSelectedCategories] = useState([])
-  const [minAmount, setMinAmount] = useState('')
-  const [maxAmount, setMaxAmount] = useState('')
 
   const dateRangeRef = useRef(null)
   const categoriesRef = useRef(null)
@@ -28,10 +36,16 @@ const Filters = () => {
   useClickAwayListener(amountRef, () => setIsAmountOpen(false), isAmountOpen)
 
   const onToggleCategory = (category) => {
-    toggleCategory(category, setSelectedCategories)
+    const newCategories = selectedCategories.includes(category)
+      ? selectedCategories.filter(c => c !== category)
+      : [...selectedCategories, category]
+    onCategoriesChange?.(newCategories)
   }
 
   const appliedFilters = []
+  if (search) {
+    appliedFilters.push({ type: 'search', label: `Search: "${search}"` })
+  }
   if (startDate && endDate) {
     appliedFilters.push({ type: 'date', label: `${formatDate(startDate)} - ${formatDate(endDate)}` })
   }
@@ -48,17 +62,35 @@ const Filters = () => {
   }
 
   const onClearFilter = (type) => {
-    clearFilter(type, setStartDate, setEndDate, setSelectedCategories, setMinAmount, setMaxAmount)
+    if (type === 'search') {
+      onSearchChange?.('')
+    } else if (type === 'date') {
+      onStartDateChange?.('')
+      onEndDateChange?.('')
+    } else if (type === 'categories') {
+      onCategoriesChange?.([])
+    } else if (type === 'amount') {
+      onMinAmountChange?.('')
+      onMaxAmountChange?.('')
+    }
   }
 
   const onClearAllFilters = () => {
-    clearAllFilters(setStartDate, setEndDate, setSelectedCategories, setMinAmount, setMaxAmount)
+    onSearchChange?.('')
+    onStartDateChange?.('')
+    onEndDateChange?.('')
+    onCategoriesChange?.([])
+    onMinAmountChange?.('')
+    onMaxAmountChange?.('')
   }
 
   return (
     <div className="bg-white dark:bg-[#102216] border border-[#dbe6df] dark:border-white/10 rounded-xl p-3 md:p-4 flex flex-col gap-3 md:gap-4">
       <div className="flex flex-wrap items-center gap-3 md:gap-4">
-        <SearchBar />
+        <SearchBar 
+          value={search}
+          onChange={onSearchChange}
+        />
         <div className="flex items-center gap-2 flex-wrap w-full sm:w-auto">
           <div className="relative" ref={dateRangeRef}>
             <FilterButton
@@ -77,8 +109,8 @@ const Filters = () => {
                 <DateRangePicker
                   startDate={startDate}
                   endDate={endDate}
-                  onStartDateChange={setStartDate}
-                  onEndDateChange={setEndDate}
+                  onStartDateChange={onStartDateChange}
+                  onEndDateChange={onEndDateChange}
                   onClose={() => setIsDateRangeOpen(false)}
                 />
               </div>
@@ -121,8 +153,8 @@ const Filters = () => {
               isOpen={isAmountOpen}
               minAmount={minAmount}
               maxAmount={maxAmount}
-              onMinAmountChange={setMinAmount}
-              onMaxAmountChange={setMaxAmount}
+              onMinAmountChange={onMinAmountChange}
+              onMaxAmountChange={onMaxAmountChange}
               onClose={() => setIsAmountOpen(false)}
             />
           </div>

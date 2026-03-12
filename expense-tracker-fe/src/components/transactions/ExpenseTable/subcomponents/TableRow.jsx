@@ -1,5 +1,4 @@
 import React from 'react'
-import PropTypes from 'prop-types'
 import { getCategoryClass } from '../helpers'
 
 const TableRow = ({ transaction, expense, index, onEdit, onDelete }) => {
@@ -31,7 +30,7 @@ const TableRow = ({ transaction, expense, index, onEdit, onDelete }) => {
           </span>
         </div>
       </td>
-      <td className="px-3 md:px-6 py-4 text-xs md:text-sm font-bold text-right text-[#111813] dark:text-white">{transaction.amount}</td>
+      <td className="px-3 md:px-6 py-4 text-xs md:text-sm font-bold text-[#111813] dark:text-white">{transaction.amount}</td>
       <td className="px-3 md:px-6 py-4 hidden md:table-cell">
         <div className="flex justify-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
           <button 
@@ -52,20 +51,6 @@ const TableRow = ({ transaction, expense, index, onEdit, onDelete }) => {
       </td>
     </tr>
   )
-}
-
-TableRow.propTypes = {
-  transaction: PropTypes.shape({
-    date: PropTypes.string.isRequired,
-    category: PropTypes.string.isRequired,
-    categoryColor: PropTypes.string.isRequired,
-    description: PropTypes.string.isRequired,
-    amount: PropTypes.string.isRequired
-  }).isRequired,
-  expense: PropTypes.object,
-  index: PropTypes.number.isRequired,
-  onEdit: PropTypes.func,
-  onDelete: PropTypes.func
 }
 
 export default TableRow

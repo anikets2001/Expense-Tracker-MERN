@@ -1,5 +1,4 @@
 import React from "react"
-import PropTypes from 'prop-types'
 
 const StatsCard = ({ title, value, footer }) => {
   return (
@@ -10,11 +9,5 @@ const StatsCard = ({ title, value, footer }) => {
     </div>
   );
 };
-
-StatsCard.propTypes = {
-  title: PropTypes.string.isRequired,
-  value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
-  footer: PropTypes.node
-}
 
 export default StatsCard

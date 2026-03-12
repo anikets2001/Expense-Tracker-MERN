@@ -1,13 +1,11 @@
 import React, { useState, useRef } from 'react'
-import PropTypes from 'prop-types'
 import useClickAwayListener from '../../../hooks/useClickAwayListener'
 import { notifications } from './config'
 import { toggleDropdown, toggleNotifications, getUnreadCount } from './helpers'
 import NotificationsDropdown from './subcomponents/NotificationsDropdown'
 import ProfileDropdown from './subcomponents/ProfileDropdown'
-import SearchBar from './subcomponents/SearchBar'
 
-const Topbar = ({title, searchbar, onMenuClick }) => {
+const Topbar = ({title, onMenuClick }) => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false)
   const [isNotificationsOpen, setIsNotificationsOpen] = useState(false)
   const dropdownRef = useRef(null)
@@ -38,9 +36,8 @@ const Topbar = ({title, searchbar, onMenuClick }) => {
         <h2 className="text-[#111813] dark:text-white text-lg md:text-xl font-bold">{title}</h2>
       </div>
       <div className="flex items-center gap-3 md:gap-6">
-        {searchbar && <SearchBar />}
         <div className="flex items-center gap-3 dark:border-[#2a3a2e]">
-          <div className="relative" ref={notificationsRef}>
+          {/* <div className="relative" ref={notificationsRef}>
             <button 
               onClick={onToggleNotifications}
               className="cursor-pointer p-2 bg-[#f0f4f2] dark:bg-[#1a2e1e] rounded-lg text-[#111813] dark:text-white relative hover:bg-[#dbe6df] dark:hover:bg-[#2a3a2e] transition-colors"
@@ -54,7 +51,7 @@ const Topbar = ({title, searchbar, onMenuClick }) => {
               isOpen={isNotificationsOpen}
               onClose={() => setIsNotificationsOpen(false)}
             />
-          </div>
+          </div> */}
           <div className="relative" ref={dropdownRef}>
             <div 
               className="flex items-center gap-3 cursor-pointer"
@@ -80,12 +77,6 @@ const Topbar = ({title, searchbar, onMenuClick }) => {
       </div>
     </header>
   )
-}
-
-Topbar.propTypes = {
-  title: PropTypes.string.isRequired,
-  searchbar: PropTypes.bool,
-  onMenuClick: PropTypes.func.isRequired
 }
 
 export default Topbar

@@ -1,5 +1,4 @@
 import React, { useState } from 'react'
-import PropTypes from 'prop-types'
 import Calendar from '../Calendar/Calendar'
 import { quickFilters, handleQuickFilter, formatDateForDisplay } from './helpers'
 
@@ -108,14 +107,6 @@ const DateRangePicker = ({ startDate, endDate, onStartDateChange, onEndDateChang
       </div>
     </div>
   )
-}
-
-DateRangePicker.propTypes = {
-  startDate: PropTypes.string.isRequired,
-  endDate: PropTypes.string.isRequired,
-  onStartDateChange: PropTypes.func.isRequired,
-  onEndDateChange: PropTypes.func.isRequired,
-  onClose: PropTypes.func.isRequired
 }
 
 export default DateRangePicker

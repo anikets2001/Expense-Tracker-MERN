@@ -1,5 +1,4 @@
 import React from 'react'
-import PropTypes from 'prop-types'
 import Calendar from '../../../common/Calendar/Calendar'
 import { formatDateForDisplay } from '../../../../utils/helpers'
 
@@ -68,20 +67,6 @@ const FormField = ({
       )}
     </div>
   )
-}
-
-FormField.propTypes = {
-  type: PropTypes.string,
-  label: PropTypes.string.isRequired,
-  value: PropTypes.string.isRequired,
-  onChange: PropTypes.func.isRequired,
-  placeholder: PropTypes.string,
-  required: PropTypes.bool,
-  options: PropTypes.arrayOf(PropTypes.string),
-  isCalendarOpen: PropTypes.bool,
-  onCalendarToggle: PropTypes.func,
-  onCalendarClose: PropTypes.func,
-  className: PropTypes.string
 }
 
 export default FormField

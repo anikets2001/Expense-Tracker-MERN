@@ -1,5 +1,4 @@
 import React from 'react'
-import PropTypes from 'prop-types'
 
 const FormActions = ({ onCancel, submitLabel = "Add Expense", cancelLabel = "Cancel", isLoading = false }) => {
   return (
@@ -31,13 +30,6 @@ const FormActions = ({ onCancel, submitLabel = "Add Expense", cancelLabel = "Can
       </button>
     </div>
   )
-}
-
-FormActions.propTypes = {
-  onCancel: PropTypes.func.isRequired,
-  submitLabel: PropTypes.string,
-  cancelLabel: PropTypes.string,
-  isLoading: PropTypes.bool
 }
 
 export default FormActions

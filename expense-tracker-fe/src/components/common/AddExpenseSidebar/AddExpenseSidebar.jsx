@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react'
-import PropTypes from 'prop-types'
 import { useCreateExpenseMutation } from '../../../redux/services/expensesApis'
 import { handleInputChange, handleSubmit } from './helpers'
 import SidebarHeader from './subcomponents/SidebarHeader'
@@ -118,12 +117,6 @@ const AddExpenseSidebar = ({ isOpen, onClose, onSuccess }) => {
       </div>
     </>
   )
-}
-
-AddExpenseSidebar.propTypes = {
-  isOpen: PropTypes.bool.isRequired,
-  onClose: PropTypes.func.isRequired,
-  onSuccess: PropTypes.func
 }
 
 export default AddExpenseSidebar

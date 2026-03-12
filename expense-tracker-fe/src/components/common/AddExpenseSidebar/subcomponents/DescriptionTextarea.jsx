@@ -1,5 +1,4 @@
 import React from 'react'
-import PropTypes from 'prop-types'
 
 const DescriptionTextarea = ({ value, onChange, placeholder = "What did you buy? (Optional)", rows = 4 }) => {
   return (
@@ -16,13 +15,6 @@ const DescriptionTextarea = ({ value, onChange, placeholder = "What did you buy?
       />
     </div>
   )
-}
-
-DescriptionTextarea.propTypes = {
-  value: PropTypes.string.isRequired,
-  onChange: PropTypes.func.isRequired,
-  placeholder: PropTypes.string,
-  rows: PropTypes.number
 }
 
 export default DescriptionTextarea

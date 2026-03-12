@@ -1,5 +1,4 @@
 import React from 'react'
-import PropTypes from 'prop-types'
 import { notifications } from '../config'
 import { getUnreadCount } from '../helpers'
 
@@ -86,11 +85,6 @@ const NotificationsDropdown = ({ isOpen, onClose }) => {
       </div>
     </>
   )
-}
-
-NotificationsDropdown.propTypes = {
-  isOpen: PropTypes.bool.isRequired,
-  onClose: PropTypes.func.isRequired
 }
 
 export default NotificationsDropdown

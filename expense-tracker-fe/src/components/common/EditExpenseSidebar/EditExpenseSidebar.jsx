@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react'
-import PropTypes from 'prop-types'
 import { useUpdateExpenseMutation } from '../../../redux/services/expensesApis'
-import { handleInputChange, handleSubmit, formatDateForInput, categories } from './helpers'
+import { handleInputChange, handleSubmit, formatDateForInput } from './helpers'
 import SidebarHeader from '../AddExpenseSidebar/subcomponents/SidebarHeader'
 import AmountInput from '../AddExpenseSidebar/subcomponents/AmountInput'
 import DateInput from '../AddExpenseSidebar/subcomponents/DateInput'
@@ -134,19 +133,6 @@ const EditExpenseSidebar = ({ isOpen, onClose, expense, onSuccess }) => {
       </div>
     </>
   )
-}
-
-EditExpenseSidebar.propTypes = {
-  isOpen: PropTypes.bool.isRequired,
-  onClose: PropTypes.func.isRequired,
-  expense: PropTypes.shape({
-    _id: PropTypes.string.isRequired,
-    amount: PropTypes.number,
-    date: PropTypes.oneOfType([PropTypes.string, PropTypes.instanceOf(Date)]),
-    category: PropTypes.string,
-    description: PropTypes.string
-  }),
-  onSuccess: PropTypes.func
 }
 
 export default EditExpenseSidebar

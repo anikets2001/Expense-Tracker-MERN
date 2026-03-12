@@ -5,7 +5,6 @@ const StatsRow = () => {
   const {
     data,
     isLoading: isLoadingStats,
-    error: errorStats,
   } = useGetExpenseStatsQuery();
 
   const stats = data?.data || {
