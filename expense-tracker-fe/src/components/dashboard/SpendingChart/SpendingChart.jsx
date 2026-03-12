@@ -84,7 +84,7 @@ const SpendingChart = () => {
               {/* Background circle */}
               <circle cx="18" cy="18" fill="transparent" r="16" stroke="#f0f4f2" strokeWidth="4"></circle>
               {/* Category segments */}
-              {chartSegments.map((segment, index) => (
+              {chartSegments.map((segment) => (
                 <circle
                   key={segment.category}
                   cx="18"

@@ -1,5 +1,4 @@
 import React, { useState, useMemo } from 'react'
-import PropTypes from 'prop-types'
 import useClickAwayListener from '../../../hooks/useClickAwayListener'
 import {
   handleDateClick as handleDateClickHelper,
@@ -126,13 +125,6 @@ const Calendar = ({ value, onChange, isOpen, onClose }) => {
       />
     </div>
   )
-}
-
-Calendar.propTypes = {
-  value: PropTypes.string,
-  onChange: PropTypes.func.isRequired,
-  isOpen: PropTypes.bool.isRequired,
-  onClose: PropTypes.func.isRequired
 }
 
 export default Calendar

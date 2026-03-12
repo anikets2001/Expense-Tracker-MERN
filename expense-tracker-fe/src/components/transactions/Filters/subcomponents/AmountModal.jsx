@@ -1,5 +1,4 @@
 import React from 'react'
-import PropTypes from 'prop-types'
 
 const AmountModal = ({ isOpen, minAmount, maxAmount, onMinAmountChange, onMaxAmountChange, onClose, className = "" }) => {
   if (!isOpen) return null
@@ -47,16 +46,6 @@ const AmountModal = ({ isOpen, minAmount, maxAmount, onMinAmountChange, onMaxAmo
       </div>
     </div>
   )
-}
-
-AmountModal.propTypes = {
-  isOpen: PropTypes.bool.isRequired,
-  minAmount: PropTypes.string.isRequired,
-  maxAmount: PropTypes.string.isRequired,
-  onMinAmountChange: PropTypes.func.isRequired,
-  onMaxAmountChange: PropTypes.func.isRequired,
-  onClose: PropTypes.func.isRequired,
-  className: PropTypes.string
 }
 
 export default AmountModal

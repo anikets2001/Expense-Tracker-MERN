@@ -1,5 +1,4 @@
 import React from 'react'
-import PropTypes from 'prop-types'
 import Calendar from '../../Calendar/Calendar'
 import { formatDateForDisplay } from '../../../../utils/helpers'
 
@@ -34,15 +33,6 @@ const DateInput = ({ value, onChange, isCalendarOpen, onCalendarToggle, onCalend
       </div>
     </div>
   )
-}
-
-DateInput.propTypes = {
-  value: PropTypes.string.isRequired,
-  onChange: PropTypes.func.isRequired,
-  isCalendarOpen: PropTypes.bool.isRequired,
-  onCalendarToggle: PropTypes.func.isRequired,
-  onCalendarClose: PropTypes.func,
-  required: PropTypes.bool
 }
 
 export default DateInput

@@ -1,5 +1,4 @@
 import React from 'react'
-import PropTypes from 'prop-types'
 import { monthNames } from '../config'
 
 const CalendarHeader = ({ currentMonth, onPreviousMonth, onNextMonth, isCurrentMonthFuture }) => {
@@ -31,13 +30,6 @@ const CalendarHeader = ({ currentMonth, onPreviousMonth, onNextMonth, isCurrentM
       </button>
     </div>
   )
-}
-
-CalendarHeader.propTypes = {
-  currentMonth: PropTypes.instanceOf(Date).isRequired,
-  onPreviousMonth: PropTypes.func.isRequired,
-  onNextMonth: PropTypes.func.isRequired,
-  isCurrentMonthFuture: PropTypes.bool.isRequired
 }
 
 export default CalendarHeader

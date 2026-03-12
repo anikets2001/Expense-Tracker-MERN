@@ -1,5 +1,4 @@
 import React from 'react'
-import PropTypes from 'prop-types'
 
 const FormHeader = ({ title, icon = "add_circle" }) => {
   return (
@@ -10,11 +9,6 @@ const FormHeader = ({ title, icon = "add_circle" }) => {
       </h3>
     </div>
   )
-}
-
-FormHeader.propTypes = {
-  title: PropTypes.string.isRequired,
-  icon: PropTypes.string
 }
 
 export default FormHeader

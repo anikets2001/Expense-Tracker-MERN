@@ -1,5 +1,4 @@
 import React from 'react'
-import PropTypes from 'prop-types'
 import { formatDateForDisplay } from '../helpers'
 
 const CalendarFooter = ({ value, onGoToToday }) => {
@@ -19,11 +18,6 @@ const CalendarFooter = ({ value, onGoToToday }) => {
       )}
     </div>
   )
-}
-
-CalendarFooter.propTypes = {
-  value: PropTypes.string,
-  onGoToToday: PropTypes.func.isRequired
 }
 
 export default CalendarFooter

@@ -1,5 +1,4 @@
 import React from 'react'
-import PropTypes from 'prop-types'
 import { Link, useLocation } from 'react-router-dom'
 
 const Sidebar = ({ isOpen, onClose }) => {
@@ -62,11 +61,6 @@ const Sidebar = ({ isOpen, onClose }) => {
       </aside>
     </>
   )
-}
-
-Sidebar.propTypes = {
-  isOpen: PropTypes.bool.isRequired,
-  onClose: PropTypes.func.isRequired
 }
 
 export default Sidebar

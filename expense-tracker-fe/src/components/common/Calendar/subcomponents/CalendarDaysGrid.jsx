@@ -1,5 +1,4 @@
 import React from 'react'
-import PropTypes from 'prop-types'
 
 const CalendarDaysGrid = ({ calendarDays, onDateClick, isToday, isSelected, isFutureDate }) => {
   return (
@@ -35,14 +34,6 @@ const CalendarDaysGrid = ({ calendarDays, onDateClick, isToday, isSelected, isFu
       })}
     </div>
   )
-}
-
-CalendarDaysGrid.propTypes = {
-  calendarDays: PropTypes.arrayOf(PropTypes.oneOfType([PropTypes.number, PropTypes.oneOf([null])])).isRequired,
-  onDateClick: PropTypes.func.isRequired,
-  isToday: PropTypes.func.isRequired,
-  isSelected: PropTypes.func.isRequired,
-  isFutureDate: PropTypes.func.isRequired
 }
 
 export default CalendarDaysGrid

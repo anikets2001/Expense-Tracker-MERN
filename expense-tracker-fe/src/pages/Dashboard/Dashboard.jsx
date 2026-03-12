@@ -5,7 +5,6 @@ import StatsRow from '../../components/dashboard/StatsRow/StatsRow'
 import QuickAddForm from '../../components/dashboard/QuickAddForm/QuickAddForm'
 import TransactionsTable from '../../components/dashboard/TransactionsTable/TransactionsTable'
 import SpendingChart from '../../components/dashboard/SpendingChart/SpendingChart'
-import SavingsGoal from '../../components/dashboard/SavingsGoal/SavingsGoal'
 
 const Dashboard = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false)
@@ -23,7 +22,7 @@ const Dashboard = () => {
       <Sidebar isOpen={isSidebarOpen} onClose={() => setIsSidebarOpen(false)} />
 
       <main className="flex-1 flex flex-col overflow-y-auto bg-background-light dark:bg-background-dark">
-        <Topbar title={'Dashboard'} searchbar={true} onMenuClick={() => setIsSidebarOpen(true)} />
+        <Topbar title={'Dashboard'} onMenuClick={() => setIsSidebarOpen(true)} />
 
         <div className="p-4 md:p-6 lg:p-8 mx-auto w-full space-y-6 md:space-y-8">
           <StatsRow />

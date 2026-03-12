@@ -1,5 +1,4 @@
 import React from 'react'
-import PropTypes from 'prop-types'
 
 const FilterButton = ({ icon, label, isOpen, isActive, onClick, className = "" }) => {
   return (
@@ -21,15 +20,6 @@ const FilterButton = ({ icon, label, isOpen, isActive, onClick, className = "" }
       </span>
     </button>
   )
-}
-
-FilterButton.propTypes = {
-  icon: PropTypes.string.isRequired,
-  label: PropTypes.string.isRequired,
-  isOpen: PropTypes.bool.isRequired,
-  isActive: PropTypes.bool.isRequired,
-  onClick: PropTypes.func.isRequired,
-  className: PropTypes.string
 }
 
 export default FilterButton

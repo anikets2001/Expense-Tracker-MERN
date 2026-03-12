@@ -1,5 +1,4 @@
 import React from 'react'
-import PropTypes from 'prop-types'
 
 const AppliedFilters = ({ filters, onClearFilter, onClearAll }) => {
   if (filters.length === 0) return null
@@ -28,15 +27,6 @@ const AppliedFilters = ({ filters, onClearFilter, onClearAll }) => {
       </button>
     </div>
   )
-}
-
-AppliedFilters.propTypes = {
-  filters: PropTypes.arrayOf(PropTypes.shape({
-    type: PropTypes.string.isRequired,
-    label: PropTypes.string.isRequired
-  })).isRequired,
-  onClearFilter: PropTypes.func.isRequired,
-  onClearAll: PropTypes.func.isRequired
 }
 
 export default AppliedFilters

@@ -1,5 +1,4 @@
 import React from 'react'
-import PropTypes from 'prop-types'
 
 const SidebarHeader = ({ title, onClose }) => {
   return (
@@ -14,11 +13,6 @@ const SidebarHeader = ({ title, onClose }) => {
       </button>
     </div>
   )
-}
-
-SidebarHeader.propTypes = {
-  title: PropTypes.string.isRequired,
-  onClose: PropTypes.func.isRequired
 }
 
 export default SidebarHeader

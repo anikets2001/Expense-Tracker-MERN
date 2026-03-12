@@ -1,5 +1,4 @@
 import React from 'react'
-import PropTypes from 'prop-types'
 import { categories } from '../helpers'
 
 const CategorySelect = ({ value, onChange, required = false }) => {
@@ -23,12 +22,6 @@ const CategorySelect = ({ value, onChange, required = false }) => {
       </select>
     </div>
   )
-}
-
-CategorySelect.propTypes = {
-  value: PropTypes.string.isRequired,
-  onChange: PropTypes.func.isRequired,
-  required: PropTypes.bool
 }
 
 export default CategorySelect

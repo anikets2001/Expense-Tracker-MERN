@@ -23,6 +23,9 @@ export const expensesApi = createApi({
         if (params.startDate) queryParams.append('startDate', params.startDate)
         if (params.endDate) queryParams.append('endDate', params.endDate)
         if (params.sortBy) queryParams.append('sortBy', params.sortBy)
+        if (params.search) queryParams.append('search', params.search)
+        if (params.minAmount) queryParams.append('minAmount', params.minAmount)
+        if (params.maxAmount) queryParams.append('maxAmount', params.maxAmount)
         
         const queryString = queryParams.toString()
         return `/expenses${queryString ? `?${queryString}` : ''}`

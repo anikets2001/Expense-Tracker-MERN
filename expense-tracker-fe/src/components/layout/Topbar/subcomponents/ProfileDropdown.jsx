@@ -1,5 +1,4 @@
 import React from 'react'
-import PropTypes from 'prop-types'
 
 const ProfileDropdown = ({ isOpen, userName = "Alex Rivera", userEmail = "alex.rivera@example.com", userRole = "Premium Member" }) => {
   if (!isOpen) return null
@@ -32,13 +31,6 @@ const ProfileDropdown = ({ isOpen, userName = "Alex Rivera", userEmail = "alex.r
       </div>
     </div>
   )
-}
-
-ProfileDropdown.propTypes = {
-  isOpen: PropTypes.bool.isRequired,
-  userName: PropTypes.string,
-  userEmail: PropTypes.string,
-  userRole: PropTypes.string
 }
 
 export default ProfileDropdown

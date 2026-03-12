@@ -1,26 +1,44 @@
 import React, { useState, useMemo } from 'react'
 import { useGetExpensesQuery, useDeleteExpenseMutation } from '../../../redux/services/expensesApis'
-import { formatDate, formatAmount, getCategoryColor } from './helpers'
+import { formatDate, formatAmount, getCategoryColor, buildSortBy } from './helpers'
 import TableHeader from './subcomponents/TableHeader'
 import TableRow from './subcomponents/TableRow'
 import EditExpenseSidebar from '../../common/EditExpenseSidebar/EditExpenseSidebar'
+import Pagination from '../Pagination/Pagination'
 
 const ExpenseTable = ({ filters = {} }) => {
   const [currentPage, setCurrentPage] = useState(1)
   const [isEditModalOpen, setIsEditModalOpen] = useState(false)
   const [selectedExpense, setSelectedExpense] = useState(null)
+  const [sortField, setSortField] = useState('date')
+  const [sortDirection, setSortDirection] = useState('desc')
+  
+  // Handle sort column click
+  const handleSort = (field) => {
+    if (sortField === field) {
+      // Toggle direction if same column
+      setSortDirection(prev => prev === 'asc' ? 'desc' : 'asc')
+    } else {
+      // Set new column with ascending direction
+      setSortField(field)
+      setSortDirection('asc')
+    }
+  }
   
   // Build query parameters
-  const queryParams = useMemo(() => ({
-    page: currentPage,
-    limit: 10,
-    sortBy: '-date',
-    ...filters
-  }), [currentPage, filters])
+  const queryParams = useMemo(() => {
+    const sortBy = buildSortBy(sortField, sortDirection)
+    return {
+      page: currentPage,
+      limit: 10,
+      sortBy,
+      ...filters
+    }
+  }, [currentPage, filters, sortField, sortDirection])
 
   // RTK Query hooks
   const { data, isLoading, error, refetch } = useGetExpensesQuery(queryParams)
-  const [deleteExpense, { isLoading: isDeleting }] = useDeleteExpenseMutation()
+  const [deleteExpense] = useDeleteExpenseMutation()
 
   const expenses = data?.data?.expenses || []
   const pagination = data?.data?.pagination || {
@@ -29,6 +47,11 @@ const ExpenseTable = ({ filters = {} }) => {
     totalItems: 0,
     itemsPerPage: 10
   }
+
+  // Reset to page 1 when filters change
+  React.useEffect(() => {
+    setCurrentPage(1)
+  }, [filters])
 
   // Handle edit button click
   const handleEdit = (expense) => {
@@ -92,7 +115,11 @@ const ExpenseTable = ({ filters = {} }) => {
             </div>
           ) : (
             <table className="w-full text-left border-collapse">
-              <TableHeader />
+              <TableHeader 
+                sortField={sortField}
+                sortDirection={sortDirection}
+                onSort={handleSort}
+              />
               <tbody className="divide-y divide-[#dbe6df] dark:divide-white/10">
                 {expenses.map((expense, index) => (
                   <TableRow 
@@ -109,6 +136,17 @@ const ExpenseTable = ({ filters = {} }) => {
           )}
         </div>
       </div>
+      
+      {/* Pagination */}
+      {!isLoading && !error && expenses.length > 0 && (
+        <Pagination
+          currentPage={pagination.currentPage}
+          totalPages={pagination.totalPages}
+          totalItems={pagination.totalItems}
+          itemsPerPage={pagination.itemsPerPage}
+          onPageChange={setCurrentPage}
+        />
+      )}
       
       {/* Edit Expense Sidebar */}
       <EditExpenseSidebar
