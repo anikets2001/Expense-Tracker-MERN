@@ -1,7 +1,8 @@
-const mongoose = require('mongoose');
-require('dotenv').config();
+import mongoose from 'mongoose';
+import dotenv from 'dotenv';
+dotenv.config();
 
-const Expense = require('./src/models/Expense');
+import Expense from './src/models/Expense.js';
 
 const checkExpenses = async () => {
   try {
