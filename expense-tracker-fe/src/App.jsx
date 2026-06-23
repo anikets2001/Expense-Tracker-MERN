@@ -3,6 +3,7 @@ import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import Dashboard from './pages/Dashboard/Dashboard'
 import Transactions from './pages/Transactions/Transactions'
 import Login from './pages/Login/Login'
+import Signup from './pages/Signup/Signup'
 
 function App() {
   useEffect(() => {
@@ -16,6 +17,7 @@ function App() {
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/transactions" element={<Transactions />} />
         <Route path='/login' element={<Login />} />
+        <Route path='/signup' element={<Signup />} />
       </Routes>
     </BrowserRouter>
   )

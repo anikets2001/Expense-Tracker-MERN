@@ -1,9 +1,9 @@
-const Expense = require('../models/Expense');
+import Expense from '../models/Expense.js';
 
 // @desc    Get all expenses
-// @route   GET 
+// @route   GET
 // @access  Public (no auth for now)
-exports.getExpenses = async (req, res) => {
+export const getExpenses = async (req, res) => {
   try {
     const { page = 1, limit = 10, category, startDate, endDate, sortBy = '-date', search, minAmount, maxAmount } = req.query;
 
@@ -82,7 +82,7 @@ exports.getExpenses = async (req, res) => {
 // @desc    Get single expense
 // @route   GET /api/expenses/:id
 // @access  Public (no auth for now)
-exports.getExpense = async (req, res) => {
+export const getExpense = async (req, res) => {
   try {
     const expense = await Expense.findById(req.params.id);
 
@@ -108,7 +108,7 @@ exports.getExpense = async (req, res) => {
 // @desc    Create new expense
 // @route   POST /api/expenses
 // @access  Public (no auth for now)
-exports.createExpense = async (req, res) => {
+export const createExpense = async (req, res) => {
   try {
     const { amount, date, category, description } = req.body;
 
@@ -153,7 +153,7 @@ exports.createExpense = async (req, res) => {
 // @desc    Update expense
 // @route   PUT /api/expenses/:id
 // @access  Public (no auth for now)
-exports.updateExpense = async (req, res) => {
+export const updateExpense = async (req, res) => {
   try {
     let expense = await Expense.findById(req.params.id);
 
@@ -209,7 +209,7 @@ exports.updateExpense = async (req, res) => {
 // @desc    Delete expense
 // @route   DELETE /api/expenses/:id
 // @access  Public (no auth for now)
-exports.deleteExpense = async (req, res) => {
+export const deleteExpense = async (req, res) => {
   try {
     const expense = await Expense.findById(req.params.id);
 
@@ -238,7 +238,7 @@ exports.deleteExpense = async (req, res) => {
 // @desc    Get expense statistics
 // @route   GET /api/expenses/stats
 // @access  Public (no auth for now)
-exports.getExpenseStats = async (req, res) => {
+export const getExpenseStats = async (req, res) => {
   try {
     const { startDate, endDate } = req.query;
 

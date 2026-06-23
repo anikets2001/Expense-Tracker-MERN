@@ -1,7 +1,11 @@
-const express = require('express');
-const mongoose = require('mongoose');
-const cors = require('cors');
-require('dotenv').config();
+import express from 'express';
+import cors from 'cors';
+import dotenv from 'dotenv';
+dotenv.config();
+
+import connectDB from './src/config/db.js';
+import expenseRoutes from './src/routes/expenseRoutes.js';
+import authRoutes from './src/routes/authRoutes.js'
 
 const app = express();
 
@@ -14,7 +18,6 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // Database connection
-const connectDB = require('./src/config/db');
 connectDB();
 
 // Basic route - Test if server is running
@@ -23,7 +26,8 @@ app.get('/', (req, res) => {
 });
 
 // API Routes
-app.use('/api/expenses', require('./src/routes/expenseRoutes'));
+app.use('/api/expenses', expenseRoutes);
+app.use('/api/auth', authRoutes)
 
 // Error handling middleware
 app.use((err, req, res, next) => {
