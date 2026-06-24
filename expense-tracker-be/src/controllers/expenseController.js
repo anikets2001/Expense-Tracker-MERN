@@ -2,13 +2,13 @@ import Expense from '../models/Expense.js';
 
 // @desc    Get all expenses
 // @route   GET
-// @access  Public (no auth for now)
+// @access  Private
 export const getExpenses = async (req, res) => {
   try {
     const { page = 1, limit = 10, category, startDate, endDate, sortBy = '-date', search, minAmount, maxAmount } = req.query;
 
     // Build query
-    const query = {};
+    const query = { user: req.user._id };
 
     if (category) {
       query.category = category;
@@ -81,10 +81,10 @@ export const getExpenses = async (req, res) => {
 
 // @desc    Get single expense
 // @route   GET /api/expenses/:id
-// @access  Public (no auth for now)
+// @access  Private
 export const getExpense = async (req, res) => {
   try {
-    const expense = await Expense.findById(req.params.id);
+    const expense = await Expense.findOne({ _id: req.params.id, user: req.user._id });
 
     if (!expense) {
       return res.status(404).json({
@@ -107,7 +107,7 @@ export const getExpense = async (req, res) => {
 
 // @desc    Create new expense
 // @route   POST /api/expenses
-// @access  Public (no auth for now)
+// @access  Private
 export const createExpense = async (req, res) => {
   try {
     const { amount, date, category, description } = req.body;
@@ -122,6 +122,7 @@ export const createExpense = async (req, res) => {
 
     // Create expense
     const expense = await Expense.create({
+      user: req.user._id,
       amount,
       date,
       category,
@@ -152,10 +153,10 @@ export const createExpense = async (req, res) => {
 
 // @desc    Update expense
 // @route   PUT /api/expenses/:id
-// @access  Public (no auth for now)
+// @access  Private
 export const updateExpense = async (req, res) => {
   try {
-    let expense = await Expense.findById(req.params.id);
+    let expense = await Expense.findOne({ _id: req.params.id, user: req.user._id });
 
     if (!expense) {
       return res.status(404).json({
@@ -175,8 +176,8 @@ export const updateExpense = async (req, res) => {
     if (description !== undefined) updateData.description = description;
 
     // Update expense
-    expense = await Expense.findByIdAndUpdate(
-      req.params.id,
+    expense = await Expense.findOneAndUpdate(
+      { _id: req.params.id, user: req.user._id },
       updateData,
       {
         new: true,
@@ -208,10 +209,10 @@ export const updateExpense = async (req, res) => {
 
 // @desc    Delete expense
 // @route   DELETE /api/expenses/:id
-// @access  Public (no auth for now)
+// @access  Private
 export const deleteExpense = async (req, res) => {
   try {
-    const expense = await Expense.findById(req.params.id);
+    const expense = await Expense.findOne({ _id: req.params.id, user: req.user._id });
 
     if (!expense) {
       return res.status(404).json({
@@ -237,13 +238,13 @@ export const deleteExpense = async (req, res) => {
 
 // @desc    Get expense statistics
 // @route   GET /api/expenses/stats
-// @access  Public (no auth for now)
+// @access  Private
 export const getExpenseStats = async (req, res) => {
   try {
     const { startDate, endDate } = req.query;
 
     // Build query
-    const query = {};
+    const query = { user: req.user._id };
 
     if (startDate || endDate) {
       query.date = {};

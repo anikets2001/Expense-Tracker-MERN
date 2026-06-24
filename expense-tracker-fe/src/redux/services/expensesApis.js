@@ -1,15 +1,9 @@
-import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
-import { API_BASE_URL } from '../../utils/config'
+import { createApi } from '@reduxjs/toolkit/query/react'
+import { baseQueryWithAuth } from './baseQueryWithAuth'
 
 export const expensesApi = createApi({
   reducerPath: 'expensesApi',
-  baseQuery: fetchBaseQuery({ 
-    baseUrl: API_BASE_URL,
-    prepareHeaders: (headers) => {
-      headers.set('Content-Type', 'application/json')
-      return headers
-    }
-  }),
+  baseQuery: baseQueryWithAuth,
   refetchOnMountOrArgChange: true,
   tagTypes: ['Expense'],
   endpoints: (build) => ({

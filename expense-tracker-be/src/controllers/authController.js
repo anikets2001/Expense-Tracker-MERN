@@ -7,8 +7,7 @@ const signToken = (userId) =>
 
 export const signUp = async (req, res) => {
   try {
-    const { firstName, lastName, email, password, confirmPassword } =
-      req.body;
+    const { firstName, lastName, email, password, confirmPassword } = req.body;
 
     // required field validation
     if (!firstName || !lastName || !email || !password || !confirmPassword) {
@@ -57,10 +56,79 @@ export const signUp = async (req, res) => {
       });
     }
 
+    // Race condition: two near-simultaneous signups with the same email both
+    // pass the findOne check above; the loser hits the schema's unique index here.
+    if (error.code === 11000) {
+      return res.status(409).json({
+        success: false,
+        message: "An account with this email already exists.",
+      });
+    }
+
     console.error("signup error:", error);
     return res.status(500).json({
       success: false,
       message: "Internal server error.",
     });
   }
+};
+
+export const signIn = async (req, res) => {
+  try {
+  const { email, password } = req.body;
+
+  // required field validation
+  if (!email || !password) {
+    return res.status(400).json({
+      success: false,
+      message: "Email & Password are required",
+    });
+  }
+
+  // find user and explicitly select password (since select:false in schema)
+  const user = await User.findOne({ email }).select("+password");
+  if (!user) {
+    return res.status(401).json({
+      success: false,
+      message: "Invalid email or password.",
+    });
+  }
+
+  // verify password
+  const isMatch = await user.comparePassword(password);
+  if (!isMatch) {
+    return res.status(401).json({
+      success: false,
+      message: "Invalid email or password.",
+    });
+  }
+
+  // strip password before sending response
+  user.password = undefined;
+
+  //sign JWT
+  const token = signToken(user._id)
+
+  return res.status(200).json({
+      success: true,
+      message: "Logged in successfully.",
+      data: { user, token },
+    });
+  }catch(error){
+    return res.status(500).json({
+      success: false,
+      message: 'Internal Server Error'
+    })
+  }
+};
+
+// @desc    Get currently authenticated user
+// @route   GET /api/auth/me
+// @access  Private
+export const getMe = async (req, res) => {
+  // req.user is already set by the `protect` middleware (password excluded by select: false)
+  return res.status(200).json({
+    success: true,
+    data: { user: req.user },
+  });
 };
