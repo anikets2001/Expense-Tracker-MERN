@@ -1,13 +1,16 @@
 import { useState } from "react";
 import { ArrowRight, Lock, Mail, User } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
 import AuthLeftSection from "../../components/common/Authentication/AuthLeftSection";
 import { signUpLeftSectionData } from "./config";
 import { useCreateUserMutation } from "../../redux/services/authApi";
+import { setCredentials } from "../../redux/slices/authSlice";
 
 const Signup = () => {
   const [createUser, {isLoading, error}] = useCreateUserMutation()
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const [formData, setFormData] = useState({
     firstName: "",
@@ -34,10 +37,12 @@ const Signup = () => {
     }
 
     try {
-      await createUser(formData).unwrap();
-      navigate('/login');
+      const result = await createUser(formData).unwrap();
+      dispatch(setCredentials(result.data));
+      navigate('/dashboard');
     } catch (err) {
       // error is also available via the `error` state from useCreateUserMutation
+      console.error(err.message)
     }
   };
 

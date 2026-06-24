@@ -1,7 +1,10 @@
 import express from 'express';
 import { getExpenses, getExpense, createExpense, updateExpense, deleteExpense, getExpenseStats } from '../controllers/expenseController.js';
+import { protect } from '../middlewares/authMiddleware.js';
 
 const router = express.Router();
+
+router.use(protect);
 
 // GET /api/expenses - Get all expenses
 router.get('/', getExpenses);
