@@ -21,8 +21,9 @@ const Sidebar = ({ isOpen, onClose }) => {
       <div className="flex flex-col gap-8">
         <div className="flex items-center justify-between px-2">
           <div className="flex items-center gap-3">
-            <div className="bg-primary rounded-lg p-1.5 flex items-center justify-center">
-              <span className="material-symbols-outlined text-black">account_balance_wallet</span>
+            <div className="flex items-center justify-center">
+              {/* <span className="material-symbols-outlined text-black">account_balance_wallet</span> */}
+              <img src='/financeFlowLogo.png' alt='logo' className='h-16 w-16'/>
             </div>
             <h1 className="text-[#111813] dark:text-white text-lg font-bold leading-normal">FinanceFlow</h1>
           </div>

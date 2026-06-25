@@ -1,7 +1,7 @@
 import React, { useState, useRef } from 'react'
 import DateRangePicker from '../../common/DateRangePicker/DateRangePicker'
 import useClickAwayListener from '../../../hooks/useClickAwayListener'
-import { formatDate, toggleCategory, clearFilter, clearAllFilters } from './helpers'
+import { formatDate } from './helpers'
 import SearchBar from './subcomponents/SearchBar'
 import FilterButton from './subcomponents/FilterButton'
 import CategoriesModal from './subcomponents/CategoriesModal'
@@ -20,8 +20,7 @@ const Filters = ({
   minAmount = '',
   onMinAmountChange,
   maxAmount = '',
-  onMaxAmountChange,
-  onFiltersChange
+  onMaxAmountChange
 }) => {
   const [isDateRangeOpen, setIsDateRangeOpen] = useState(false)
   const [isCategoriesOpen, setIsCategoriesOpen] = useState(false)

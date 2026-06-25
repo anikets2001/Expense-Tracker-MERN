@@ -7,7 +7,7 @@ const CalendarFooter = ({ value, onGoToToday }) => {
       <button
         type="button"
         onClick={onGoToToday}
-        className="text-sm font-bold text-primary hover:underline"
+        className="cursor-pointer text-sm font-bold text-primary hover:underline"
       >
         Today
       </button>

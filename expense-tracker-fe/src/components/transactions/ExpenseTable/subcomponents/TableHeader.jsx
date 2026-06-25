@@ -37,7 +37,7 @@ const TableHeader = ({ sortField, sortDirection, onSort }) => {
             </span>
           </div>
         </th>
-        <th className="px-3 md:px-6 py-4 text-xs font-bold text-[#61896f] uppercase tracking-wider text-center bg-[#f0f4f2]/50 dark:bg-white/5 backdrop-blur-sm hidden md:table-cell">Actions</th>
+        <th className="px-3 md:px-6 py-4 text-xs font-bold text-[#61896f] uppercase tracking-wider text-center bg-[#f0f4f2]/50 dark:bg-white/5 backdrop-blur-sm">Actions</th>
       </tr>
     </thead>
   )

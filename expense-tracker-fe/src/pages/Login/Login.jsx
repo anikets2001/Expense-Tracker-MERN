@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { ArrowRight, Lock, Mail } from "lucide-react";
@@ -95,7 +95,7 @@ const Login = () => {
                   </label>
                   {/* <button
                     type="button"
-                    className="text-sm text-primary hover:underline"
+                    className="cursor-pointer text-sm text-primary hover:underline"
                   >
                     Forgot password?
                   </button> */}
@@ -123,23 +123,23 @@ const Login = () => {
               <button
                 type="submit"
                 disabled={isLoading}
-                className="w-full rounded-2xl bg-primary text-black h-12 font-semibold text-base shadow-lg shadow-primary/20 hover:brightness-95 transition-all flex items-center justify-center gap-2 disabled:opacity-60 disabled:cursor-not-allowed"
+                className="cursor-pointer w-full rounded-2xl bg-primary text-black h-12 font-semibold text-base shadow-lg shadow-primary/20 hover:brightness-95 transition-all flex items-center justify-center gap-2 disabled:opacity-60 disabled:cursor-not-allowed"
               >
                 {isLoading ? 'Please wait' : 'Continue'}
                 {!isLoading && <ArrowRight className="h-4 w-4" />}
               </button>
 
-              <div className="flex items-center gap-3 text-xs text-slate-500 dark:text-slate-400">
+              {/* <div className="flex items-center gap-3 text-xs text-slate-500 dark:text-slate-400">
                 <span className="flex-1 h-px bg-slate-200 dark:bg-slate-700" />
                 <span className="font-semibold uppercase tracking-[0.2em]">
                   or
                 </span>
                 <span className="flex-1 h-px bg-slate-200 dark:bg-slate-700" />
-              </div>
+              </div> */}
 
-              <button
+              {/* <button
                 type="button"
-                className="w-full rounded-2xl border border-[#dbe6df] dark:border-[#2a3a2e] h-12 flex items-center justify-center gap-3 text-sm text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-[#112117] transition"
+                className="cursor-pointer w-full rounded-2xl border border-[#dbe6df] dark:border-[#2a3a2e] h-12 flex items-center justify-center gap-3 text-sm text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-[#112117] transition"
               >
                 <svg className="w-5 h-5" viewBox="0 0 24 24" aria-hidden="true">
                   <path
@@ -160,11 +160,11 @@ const Login = () => {
                   />
                 </svg>
                 Continue with Google
-              </button>
+              </button> */}
             </form>
 
             <div className="mt-auto pt-8 text-center text-sm text-slate-500 dark:text-slate-400">
-              Don't have an account?
+              Don&apos;t have an account?
               <Link
                 to="/signup"
                 className="font-semibold text-primary ml-1 hover:underline"

@@ -31,6 +31,24 @@ const TableRow = ({ transaction, expense, index, onEdit, onDelete }) => {
         </div>
       </td>
       <td className="px-3 md:px-6 py-4 text-xs md:text-sm font-bold text-[#111813] dark:text-white">{transaction.amount}</td>
+      <td className="px-3 md:px-6 py-4 text-xs md:text-sm text-center md:hidden">
+        <div className="flex justify-center gap-2 sm:justify-end">
+          <button 
+            onClick={handleEditClick}
+            className="cursor-pointer p-2 rounded-md bg-[#f0f4f2] dark:bg-white/5 text-[#61896f] hover:bg-[#dfe9e3] dark:hover:bg-white/10 transition-colors"
+            title="Edit expense"
+          >
+            <span className="material-symbols-outlined text-base">edit</span>
+          </button>
+          <button 
+            onClick={handleDeleteClick}
+            className="cursor-pointer p-2 rounded-md bg-[#f0f4f2] dark:bg-white/5 text-[#61896f] hover:bg-red-50 hover:text-red-500 transition-colors"
+            title="Delete expense"
+          >
+            <span className="material-symbols-outlined text-base">delete</span>
+          </button>
+        </div>
+      </td>
       <td className="px-3 md:px-6 py-4 hidden md:table-cell">
         <div className="flex justify-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
           <button 

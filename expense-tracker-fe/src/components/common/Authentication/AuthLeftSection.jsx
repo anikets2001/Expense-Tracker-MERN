@@ -12,11 +12,9 @@ const AuthLeftSection = ({ data }) => {
 
       <div className="space-y-4 text-sm font-medium">
         {data[0]?.features?.map((item, index) => (
-          <div className="rounded-3xl bg-black/5 p-4">
-            <p className="text-black/90 font-bold">Built for fast budgeting</p>
-            <p className="text-black/70">
-              See your latest expenses, budgets, and cash flow in one place.
-            </p>
+          <div key={`${item.title}-${index}`} className="rounded-3xl bg-black/5 p-4">
+            <p className="text-black/90 font-bold">{item.title}</p>
+            <p className="text-black/70">{item.subtitle}</p>
           </div>
         ))}
       </div>
