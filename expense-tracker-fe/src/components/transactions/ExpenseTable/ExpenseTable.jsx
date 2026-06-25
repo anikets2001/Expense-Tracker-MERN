@@ -91,7 +91,7 @@ const ExpenseTable = ({ filters = {} }) => {
   return (
     <div className="bg-white dark:bg-[#102216] border border-[#dbe6df] dark:border-white/10 rounded-xl overflow-hidden shadow-sm">
       <div className="overflow-x-auto">
-        <div className="max-h-[calc(100vh-620px)] overflow-y-auto">
+        <div className="max-h-none sm:max-h-[calc(100vh-430px)] md:max-h-[calc(100vh-570px)] overflow-y-auto">
           {isLoading ? (
             <div className="p-12 text-center">
               <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
@@ -138,7 +138,7 @@ const ExpenseTable = ({ filters = {} }) => {
       </div>
       
       {/* Pagination */}
-      {!isLoading && !error && expenses.length > 0 && (
+      {!isLoading && !error && (
         <Pagination
           currentPage={pagination.currentPage}
           totalPages={pagination.totalPages}

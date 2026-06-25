@@ -22,10 +22,10 @@ const CalendarDaysGrid = ({ calendarDays, onDateClick, isToday, isSelected, isFu
               isFuture
                 ? 'opacity-40 cursor-not-allowed text-[#61896f]'
                 : isSelectedDate
-                ? 'bg-primary text-black'
+                ? 'bg-primary cursor-pointer text-black'
                 : isTodayDate
-                ? 'bg-primary/20 text-primary border-2 border-primary'
-                : 'text-[#111813] dark:text-white hover:bg-[#f0f4f2] dark:hover:bg-[#102216]'
+                ? 'bg-primary/20 text-primary border-2 cursor-pointer border-primary'
+                : 'text-[#111813] cursor-pointer dark:text-white hover:bg-[#f0f4f2] dark:hover:bg-[#102216]'
             }`}
           >
             {day}
