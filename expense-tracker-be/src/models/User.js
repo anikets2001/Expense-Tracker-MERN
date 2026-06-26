@@ -24,14 +24,18 @@ const userSchema = new mongoose.Schema({
     },
     password: {
         type: String,
-        required: [true, 'Password is required'],
+        required: [function () { return !this.googleId; }, 'Password is required'],
         minlength: [6, 'Password must be at least 6 characters'],
         select: false,
-    }
+    },
+    googleId: {
+        type: String,
+        default: null,
+    },
 }, { timestamps: true })
 
 userSchema.pre('save', async function (next) {
-    if (!this.isModified('password')) {
+    if (!this.isModified('password') || !this.password) {
         return next();
     }
 
@@ -41,6 +45,7 @@ userSchema.pre('save', async function (next) {
 });
 
 userSchema.methods.comparePassword = function (candidatePassword) {
+    if (!this.password) return Promise.resolve(false);
     return bcrypt.compare(candidatePassword, this.password);
 };
 

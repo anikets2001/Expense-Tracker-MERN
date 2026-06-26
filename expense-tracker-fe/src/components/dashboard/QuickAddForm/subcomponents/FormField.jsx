@@ -34,7 +34,7 @@ const FormField = ({
           ))}
         </select>
       ) : type === 'date' ? (
-        <div className="relative z-50">
+        <div className="relative">
           <input
             readOnly
             value={formatDateForDisplay(value, 'mm/dd/yyyy')}

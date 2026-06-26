@@ -21,10 +21,17 @@ export const authApi = createApi({
         body: loginData
       })
     }),
+    googleSignIn: build.mutation({
+      query: (idToken) => ({
+        url: '/auth/google',
+        method: 'POST',
+        body: { idToken },
+      }),
+    }),
     getMe: build.query({
       query: () => '/auth/me',
     }),
   })
 });
 
-export const {useCreateUserMutation, useSignInMutation, useGetMeQuery}  = authApi
+export const {useCreateUserMutation, useSignInMutation, useGoogleSignInMutation, useGetMeQuery}  = authApi

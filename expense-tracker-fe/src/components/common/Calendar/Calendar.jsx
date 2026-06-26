@@ -100,7 +100,7 @@ const Calendar = ({ value, onChange, isOpen, onClose }) => {
   return (
     <div 
       ref={calendarRef}
-      className="absolute top-full left-0 mt-2 w-[calc(100vw-2rem)] sm:w-80 bg-white dark:bg-[#1a2e1e] rounded-lg shadow-xl border border-[#dbe6df] dark:border-[#2a3a2e] p-3 md:p-4 z-[100] max-w-[calc(100vw-2rem)]"
+      className="absolute top-full left-0 right-0 sm:right-auto mt-2 w-auto sm:w-80 max-w-full bg-white dark:bg-[#1a2e1e] rounded-lg shadow-xl border border-[#dbe6df] dark:border-[#2a3a2e] p-3 md:p-4 z-30"
     >
       <CalendarHeader
         currentMonth={currentMonth}

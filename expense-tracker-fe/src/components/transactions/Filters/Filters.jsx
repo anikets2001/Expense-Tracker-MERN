@@ -90,7 +90,7 @@ const Filters = ({
           value={search}
           onChange={onSearchChange}
         />
-        <div className="flex items-center gap-2 flex-wrap w-full sm:w-auto">
+        <div className="grid grid-cols-3 sm:flex sm:items-center gap-2 w-full sm:w-auto">
           <div className="relative" ref={dateRangeRef}>
             <FilterButton
               icon="calendar_month"
@@ -104,7 +104,7 @@ const Filters = ({
               }}
             />
             {isDateRangeOpen && (
-              <div className="absolute top-full right-0 mt-2 z-50 w-[calc(100vw-2rem)] sm:w-96 max-w-[calc(100vw-2rem)]">
+              <div className="absolute top-full left-0 sm:left-auto sm:right-0 mt-2 z-50 w-[calc(100vw-2rem)] sm:w-96 max-w-[calc(100vw-2rem)]">
                 <DateRangePicker
                   startDate={startDate}
                   endDate={endDate}

@@ -1,9 +1,12 @@
 import jwt from "jsonwebtoken";
+import { OAuth2Client } from "google-auth-library";
 import User from "../models/User.js";
 
 // HELPERS
 const signToken = (userId) =>
   jwt.sign({ id: userId }, process.env.JWT_SECRET, { expiresIn: "7d" });
+
+const googleClient = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 
 export const signUp = async (req, res) => {
   try {
@@ -119,6 +122,61 @@ export const signIn = async (req, res) => {
       success: false,
       message: 'Internal Server Error'
     })
+  }
+};
+
+export const googleSignIn = async (req, res) => {
+  try {
+    const { idToken } = req.body;
+
+    if (!idToken) {
+      return res.status(400).json({
+        success: false,
+        message: "Google ID token is required.",
+      });
+    }
+
+    // verify token with Google
+    const ticket = await googleClient.verifyIdToken({
+      idToken,
+      audience: process.env.GOOGLE_CLIENT_ID,
+    });
+    const payload = ticket.getPayload();
+    const { sub: googleId, email, given_name, family_name } = payload;
+
+    // find existing user by googleId or email, else create one
+    let user = await User.findOne({ $or: [{ googleId }, { email }] });
+
+    if (user) {
+      if (!user.googleId) {
+        user.googleId = googleId;
+        await user.save();
+      }
+    } else {
+      user = await User.create({
+        firstName: given_name || "Google",
+        lastName: family_name || "User",
+        email,
+        googleId,
+      });
+    }
+
+    user.password = undefined;
+
+    // sign JWT
+    const token = signToken(user._id);
+
+    return res.status(200).json({
+      success: true,
+      message: "Logged in successfully.",
+      data: { user, token },
+    });
+  } catch (error) {
+    console.error("google sign-in error:", error);
+    return res.status(401).json({
+      success: false,
+      message: "Invalid Google token.",
+    });
   }
 };
 
