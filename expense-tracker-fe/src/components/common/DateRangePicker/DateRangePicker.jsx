@@ -10,7 +10,7 @@ const DateRangePicker = ({ startDate, endDate, onStartDateChange, onEndDateChang
   }
 
   return (
-    <div className="w-full sm:w-96 bg-white dark:bg-[#1a2e1e] rounded-lg shadow-xl border border-[#dbe6df] dark:border-[#2a3a2e] p-4 z-[100]">
+    <div className="w-full sm:w-96 bg-white dark:bg-[#1a2e1e] rounded-lg shadow-xl border border-[#dbe6df] dark:border-[#2a3a2e] p-4 z-30">
       <div className="mb-4">
         <h3 className="text-sm font-bold text-[#111813] dark:text-white mb-3">Quick Filters</h3>
         <div className="flex flex-wrap gap-2">
@@ -46,7 +46,7 @@ const DateRangePicker = ({ startDate, endDate, onStartDateChange, onEndDateChang
               calendar_today
             </span>
             {activePicker === 'start' && (
-              <div className="absolute top-full left-0 mt-2 z-50">
+              <div className="absolute top-full left-0 right-0 mt-2 z-50">
                 <Calendar
                   value={startDate}
                   onChange={onStartDateChange}
@@ -76,7 +76,7 @@ const DateRangePicker = ({ startDate, endDate, onStartDateChange, onEndDateChang
               calendar_today
             </span>
             {activePicker === 'end' && (
-              <div className="absolute top-full left-0 mt-2 z-50">
+              <div className="absolute top-full left-0 right-0 mt-2 z-50">
                 <Calendar
                   value={endDate}
                   onChange={onEndDateChange}

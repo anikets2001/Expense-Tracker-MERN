@@ -5,7 +5,7 @@ const CategoriesModal = ({ isOpen, selectedCategories, onToggleCategory, onClose
   if (!isOpen) return null
 
   return (
-    <div className={`absolute top-full right-0 mt-2 w-[calc(100vw-2rem)] sm:w-64 bg-white dark:bg-[#1a2e1e] rounded-lg shadow-xl border border-[#dbe6df] dark:border-[#2a3a2e] p-4 z-50 max-w-[calc(100vw-2rem)] ${className}`}>
+    <div className={`absolute top-full left-1/2 -translate-x-1/2 sm:left-auto sm:right-0 sm:translate-x-0 mt-2 w-64 bg-white dark:bg-[#1a2e1e] rounded-lg shadow-xl border border-[#dbe6df] dark:border-[#2a3a2e] p-4 z-50 max-w-[calc(100vw-2rem)] ${className}`}>
       <h3 className="text-sm font-bold text-[#111813] dark:text-white mb-3">Select Categories</h3>
       <div className="space-y-2 max-h-64 overflow-y-auto">
         {categories.map((category) => (

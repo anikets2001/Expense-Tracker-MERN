@@ -20,6 +20,12 @@ const Pagination = ({
     }
   }, [totalItems, itemsPerPage, currentPage, onPageChange]);
 
+  const handleFirst = () => {
+    if (currentPage !== 1) {
+      onPageChange(1);
+    }
+  };
+
   const handlePrevious = () => {
     if (currentPage > 1) {
       onPageChange(currentPage - 1);
@@ -29,6 +35,12 @@ const Pagination = ({
   const handleNext = () => {
     if (currentPage < totalPages) {
       onPageChange(currentPage + 1);
+    }
+  };
+
+  const handleLast = () => {
+    if (currentPage !== totalPages) {
+      onPageChange(totalPages);
     }
   };
 
@@ -56,9 +68,21 @@ const Pagination = ({
       </p>
       <div className="flex items-center gap-1 md:gap-2">
         <button
+          onClick={handleFirst}
+          disabled={currentPage === 1}
+          aria-label="First page"
+          className="cursor-pointer h-9 w-9 md:h-10 md:w-10 flex items-center justify-center rounded border border-[#dbe6df] dark:border-white/10 hover:bg-white dark:hover:bg-white/10 transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
+        >
+          <span className="material-symbols-outlined text-[#111813] dark:text-white text-sm md:text-base">
+            first_page
+          </span>
+        </button>
+
+        <button
           onClick={handlePrevious}
           disabled={currentPage === 1}
-          className="cursor-pointer p-2 rounded border border-[#dbe6df] dark:border-white/10 hover:bg-white dark:hover:bg-white/10 transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
+          aria-label="Previous page"
+          className="cursor-pointer h-9 w-9 md:h-10 md:w-10 flex items-center justify-center rounded border border-[#dbe6df] dark:border-white/10 hover:bg-white dark:hover:bg-white/10 transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
         >
           <span className="material-symbols-outlined text-[#111813] dark:text-white text-sm md:text-base">
             chevron_left
@@ -107,10 +131,22 @@ const Pagination = ({
         <button
           onClick={handleNext}
           disabled={currentPage === totalPages}
-          className="cursor-pointer flex items-center justify-center p-2 rounded border border-[#dbe6df] dark:border-white/10 hover:bg-white dark:hover:bg-white/10 transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
+          aria-label="Next page"
+          className="cursor-pointer h-9 w-9 md:h-10 md:w-10 flex items-center justify-center rounded border border-[#dbe6df] dark:border-white/10 hover:bg-white dark:hover:bg-white/10 transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
         >
           <span className="material-symbols-outlined text-[#111813] dark:text-white text-sm md:text-base">
             chevron_right
+          </span>
+        </button>
+
+        <button
+          onClick={handleLast}
+          disabled={currentPage === totalPages}
+          aria-label="Last page"
+          className="cursor-pointer h-9 w-9 md:h-10 md:w-10 flex items-center justify-center rounded border border-[#dbe6df] dark:border-white/10 hover:bg-white dark:hover:bg-white/10 transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
+        >
+          <span className="material-symbols-outlined text-[#111813] dark:text-white text-sm md:text-base">
+            last_page
           </span>
         </button>
       </div>

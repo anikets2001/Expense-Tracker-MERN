@@ -2,13 +2,15 @@ import React, { useState } from "react";
 import { ArrowRight, Lock, Mail, User } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
+import { GoogleLogin } from "@react-oauth/google";
 import AuthLeftSection from "../../components/common/Authentication/AuthLeftSection";
 import { signUpLeftSectionData } from "./config";
-import { useCreateUserMutation } from "../../redux/services/authApi";
+import { useCreateUserMutation, useGoogleSignInMutation } from "../../redux/services/authApi";
 import { setCredentials } from "../../redux/slices/authSlice";
 
 const Signup = () => {
   const [createUser, {isLoading, error}] = useCreateUserMutation()
+  const [googleSignIn, { error: googleError }] = useGoogleSignInMutation();
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
@@ -46,15 +48,25 @@ const Signup = () => {
     }
   };
 
+  const handleGoogleSuccess = async (credentialResponse) => {
+    try {
+      const result = await googleSignIn(credentialResponse.credential).unwrap();
+      dispatch(setCredentials(result.data));
+      navigate('/dashboard')
+    } catch (err) {
+      console.error(err.message)
+    }
+  };
+
   return (
-    <div className="min-h-screen bg-background-light dark:bg-background-dark text-[#111813] dark:text-white flex items-center justify-center px-4 py-10">
+    <div className="min-h-screen bg-background-light dark:bg-background-dark text-[#111813] dark:text-white flex items-center justify-center px-4 py-6 sm:py-10">
       <div className="relative w-full max-w-6xl">
         <div className="absolute inset-0 rounded-[34px] bg-primary/10 blur-3xl opacity-30" />
         <div className="relative grid gap-8 lg:grid-cols-[1.2fr_1fr] items-stretch rounded-[34px] overflow-hidden shadow-2xl shadow-primary/10">
           <AuthLeftSection data={signUpLeftSectionData} />
 
-          <section className="bg-white dark:bg-black border border-[#dbe6df] dark:border-[#2a3a2e] p-8 md:p-10 rounded-[34px] lg:rounded-tl-none lg:rounded-bl-none min-h-[680px] flex flex-col">
-            <div className="mb-8">
+          <section className="bg-white dark:bg-black border border-[#dbe6df] dark:border-[#2a3a2e] p-6 sm:p-8 md:p-10 rounded-[34px] lg:rounded-tl-none lg:rounded-bl-none lg:min-h-[760px] flex flex-col">
+            <div className="mb-4 sm:mb-8">
               <p className="text-sm text-primary font-bold uppercase tracking-[0.2em] mb-3">
                 Create account
               </p>
@@ -66,8 +78,8 @@ const Signup = () => {
               </p>
             </div>
 
-            <form onSubmit={handleSubmit} className="space-y-6">
-              <div className="grid gap-6 md:grid-cols-2">
+            <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-6">
+              <div className="grid grid-cols-2 gap-4 sm:gap-6">
                 <div>
                   <label
                     htmlFor="firstName"
@@ -132,7 +144,7 @@ const Signup = () => {
                 </div>
               </div>
 
-              <div className="grid gap-6 md:grid-cols-2">
+              <div className="grid grid-cols-2 gap-4 sm:gap-6">
                 <div>
                   <label
                     htmlFor="password"
@@ -176,9 +188,9 @@ const Signup = () => {
                 </div>
               </div>
 
-              {(validationError || error) && (
+              {(validationError || error || googleError) && (
                 <p className="text-sm text-red-500">
-                  {validationError || error?.data?.message || 'Something went wrong. Please try again.'}
+                  {validationError || error?.data?.message || googleError?.data?.message || 'Something went wrong. Please try again.'}
                 </p>
               )}
 
@@ -190,9 +202,27 @@ const Signup = () => {
                 {isLoading ? 'Creating account...' : 'Create account'}
                 {!isLoading && <ArrowRight className="h-4 w-4" />}
               </button>
+
+              <div className="flex items-center gap-3 text-xs text-slate-500 dark:text-slate-400">
+                <span className="flex-1 h-px bg-slate-200 dark:bg-slate-700" />
+                <span className="font-semibold uppercase tracking-[0.2em]">
+                  or
+                </span>
+                <span className="flex-1 h-px bg-slate-200 dark:bg-slate-700" />
+              </div>
+
+              <div className="flex justify-center">
+                <GoogleLogin
+                  onSuccess={handleGoogleSuccess}
+                  onError={() => console.error("Google sign-in failed")}
+                  shape="pill"
+                  text="signup_with"
+                  size="large"
+                />
+              </div>
             </form>
 
-            <div className="mt-auto pt-8 text-center text-sm text-slate-500 dark:text-slate-400">
+            <div className="mt-auto pt-4 sm:pt-8 text-center text-sm text-slate-500 dark:text-slate-400">
               Already have an account?
               <Link
                 to="/login"

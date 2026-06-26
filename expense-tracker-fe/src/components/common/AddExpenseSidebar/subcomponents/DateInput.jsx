@@ -21,7 +21,7 @@ const DateInput = ({ value, onChange, isCalendarOpen, onCalendarToggle, onCalend
           calendar_today
         </span>
         {isCalendarOpen && (
-          <div className="absolute top-full left-0 mt-2 z-50">
+          <div className="absolute top-full left-0 right-0 mt-2 z-50">
             <Calendar
               value={value}
               onChange={onChange}
