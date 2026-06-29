@@ -29,7 +29,7 @@ const Topbar = ({ title, onMenuClick }) => {
       <div className="flex items-center gap-2">
         <button
           onClick={onMenuClick}
-          className="lg:hidden p-2 hover:bg-[#f0f4f2] dark:hover:bg-[#1a2e1e] rounded-lg transition-colors mr-2"
+          className="lg:hidden p-2 mt-2 hover:bg-[#f0f4f2] dark:hover:bg-[#1a2e1e] rounded-lg transition-colors mr-2"
         >
           <span className="material-symbols-outlined text-[#111813] dark:text-white">
             menu

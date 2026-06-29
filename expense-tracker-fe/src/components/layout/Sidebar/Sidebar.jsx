@@ -23,13 +23,13 @@ const Sidebar = ({ isOpen, onClose }) => {
           <div className="flex items-center gap-3">
             <div className="flex items-center justify-center">
               {/* <span className="material-symbols-outlined text-black">account_balance_wallet</span> */}
-              <img src='/financeFlowLogo.png' alt='logo' className='h-16 w-16'/>
+              <img src='/financeFlowLogo.png' alt='logo' className='lg:h-16 lg:w-16'/>
             </div>
             <h1 className="text-[#111813] dark:text-white text-lg font-bold leading-normal">FinanceFlow</h1>
           </div>
           <button
             onClick={onClose}
-            className="lg:hidden p-2 hover:bg-[#f0f4f2] dark:hover:bg-[#1a2e1e] rounded-lg transition-colors"
+            className="lg:hidden p-2 mt-2 hover:bg-[#f0f4f2] dark:hover:bg-[#1a2e1e] rounded-lg transition-colors"
           >
             <span className="material-symbols-outlined text-[#111813] dark:text-white">close</span>
           </button>
