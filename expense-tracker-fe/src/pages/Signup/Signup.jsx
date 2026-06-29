@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { ArrowRight, Lock, Mail, User } from "lucide-react";
+import { ArrowRight, Lock, Mail, User, Eye, EyeOff } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { GoogleLogin } from "@react-oauth/google";
@@ -22,6 +22,8 @@ const Signup = () => {
     confirmPassword: "",
   });
   const [validationError, setValidationError] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   const handleChange = (e) => {
     setFormData((prev) => ({
@@ -157,12 +159,20 @@ const Signup = () => {
                     <input
                       id="password"
                       name="password"
-                      type="password"
+                      type={showPassword ? "text" : "password"}
                       value={formData.password}
                       onChange={handleChange}
                       placeholder="Create password"
-                      className="w-full rounded-2xl border border-[#dbe6df] dark:border-[#2a3a2e] bg-[#f8faf9] dark:bg-[#102216] placeholder:text-slate-400 text-[#111813] dark:text-white h-12 pl-12 pr-4 outline-none transition focus:border-primary focus:bg-white dark:focus:bg-[#112117]"
+                      className="w-full rounded-2xl border border-[#dbe6df] dark:border-[#2a3a2e] bg-[#f8faf9] dark:bg-[#102216] placeholder:text-slate-400 text-[#111813] dark:text-white h-12 pl-12 pr-12 outline-none transition focus:border-primary focus:bg-white dark:focus:bg-[#112117]"
                     />
+                    <button
+                      type="button"
+                      onClick={() => setShowPassword((prev) => !prev)}
+                      className="cursor-pointer absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200"
+                      aria-label={showPassword ? "Hide password" : "Show password"}
+                    >
+                      {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
+                    </button>
                   </div>
                 </div>
 
@@ -178,12 +188,20 @@ const Signup = () => {
                     <input
                       id="confirmPassword"
                       name="confirmPassword"
-                      type="password"
+                      type={showConfirmPassword ? "text" : "password"}
                       value={formData.confirmPassword}
                       onChange={handleChange}
                       placeholder="Confirm password"
-                      className="w-full rounded-2xl border border-[#dbe6df] dark:border-[#2a3a2e] bg-[#f8faf9] dark:bg-[#102216] placeholder:text-slate-400 text-[#111813] dark:text-white h-12 pl-12 pr-4 outline-none transition focus:border-primary focus:bg-white dark:focus:bg-[#112117]"
+                      className="w-full rounded-2xl border border-[#dbe6df] dark:border-[#2a3a2e] bg-[#f8faf9] dark:bg-[#102216] placeholder:text-slate-400 text-[#111813] dark:text-white h-12 pl-12 pr-12 outline-none transition focus:border-primary focus:bg-white dark:focus:bg-[#112117]"
                     />
+                    <button
+                      type="button"
+                      onClick={() => setShowConfirmPassword((prev) => !prev)}
+                      className="cursor-pointer absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200"
+                      aria-label={showConfirmPassword ? "Hide password" : "Show password"}
+                    >
+                      {showConfirmPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
+                    </button>
                   </div>
                 </div>
               </div>

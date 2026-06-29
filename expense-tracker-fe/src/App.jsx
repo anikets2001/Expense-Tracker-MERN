@@ -5,6 +5,8 @@ import Transactions from './pages/Transactions/Transactions'
 import Login from './pages/Login/Login'
 import Signup from './pages/Signup/Signup'
 import PrivateRoute from './components/common/PrivateRoute/PrivateRoute'
+import Profile from './pages/Profile/Profile'
+import Settings from './pages/Settings/Settings'
 
 function App() {
   useEffect(() => {
@@ -18,6 +20,8 @@ function App() {
         <Route element={<PrivateRoute />}>
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/transactions" element={<Transactions />} />
+          <Route path="/profile" element={<Profile />} />
+          <Route path="/settings" element={<Settings />} />
         </Route>
         <Route path='/login' element={<Login />} />
         <Route path='/signup' element={<Signup />} />
