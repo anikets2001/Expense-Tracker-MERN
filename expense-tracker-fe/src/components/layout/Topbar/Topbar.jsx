@@ -16,7 +16,7 @@ const Topbar = ({ title, onMenuClick }) => {
     refetch,
   } = useGetMeQuery();
 
-  const {firstName, lastName} = userData?.data?.user;
+  const {firstName, lastName, email} = userData?.data?.user;
   const initials = firstName[0]+lastName[0];
 
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -88,7 +88,7 @@ const Topbar = ({ title, onMenuClick }) => {
                 {isDropdownOpen ? "expand_less" : "expand_more"}
               </span>
             </div>
-            <ProfileDropdown isOpen={isDropdownOpen} />
+            <ProfileDropdown isOpen={isDropdownOpen} firstName={firstName} lastName={lastName} email={email}/>
           </div>
         </div>
       </div>

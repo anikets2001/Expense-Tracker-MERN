@@ -3,7 +3,7 @@ import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import { logout } from '../../../../redux/slices/authSlice'
 
-const ProfileDropdown = ({ isOpen, userName = "John Doe", userEmail = "johndoe@gmail.com" }) => {
+const ProfileDropdown = ({ isOpen, firstName = "John", lastName="Doe", email = "johndoe@gmail.com" }) => {
   const dispatch = useDispatch()
   const navigate = useNavigate()
 
@@ -17,8 +17,8 @@ const ProfileDropdown = ({ isOpen, userName = "John Doe", userEmail = "johndoe@g
   return (
     <div className="absolute right-0 mt-2 w-[calc(100vw-2rem)] sm:w-56 bg-white dark:bg-[#1a2e1e] rounded-lg shadow-lg border border-[#dbe6df] dark:border-[#2a3a2e] overflow-hidden z-50 max-w-[calc(100vw-2rem)]">
       <div className="px-4 py-3 border-b border-[#dbe6df] dark:border-[#2a3a2e]">
-        <p className="text-sm font-bold text-[#111813] dark:text-white">{userName}</p>
-        <p className="text-xs text-[#61896f] font-medium mt-0.5">{userEmail}</p>
+        <p className="text-sm font-bold text-[#111813] dark:text-white">{firstName} {lastName}</p>
+        <p className="text-xs text-[#61896f] font-medium mt-0.5">{email}</p>
         {/* {userRole && <p className="text-xs text-[#61896f] font-medium mt-0.5">{userRole}</p>} */}
       </div>
       <div className="py-1">
