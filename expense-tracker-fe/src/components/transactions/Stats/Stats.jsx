@@ -1,14 +1,7 @@
 import React from "react";
+import { formatCurrency } from "../../../utils/helpers.js";
 
 const Stats = ({ stats, isLoading, error }) => {
-  // Format amount for display
-  const formatAmount = (amount) => {
-    return `₹${amount.toLocaleString("en-IN", {
-      minimumFractionDigits: 2,
-      maximumFractionDigits: 2,
-    })}`;
-  };
-
   return (
     <div className="flex flex-wrap gap-3 md:gap-4">
       <div className="flex min-w-[150px] sm:min-w-[200px] flex-1 flex-col gap-2 rounded-xl p-4 md:p-6 border border-[#dbe6df] dark:border-white/10 bg-white dark:bg-[#102216]">
@@ -26,7 +19,7 @@ const Stats = ({ stats, isLoading, error }) => {
           </p>
         ) : (
           <p className="text-[#111813] dark:text-white text-2xl md:text-3xl font-bold tracking-tight">
-            {formatAmount(stats.totalSpent)}
+             ₹{formatCurrency(stats.totalSpent, "en-IN")}
           </p>
         )}
         {/* <p className="text-xs text-red-500 font-medium">+12% from last month</p> */}
@@ -66,7 +59,7 @@ const Stats = ({ stats, isLoading, error }) => {
           </p>
         ) : (
           <p className="text-[#111813] dark:text-white text-2xl md:text-3xl font-bold tracking-tight">
-            {formatAmount(stats.dailyAverage)}
+             ₹{formatCurrency(stats.dailyAverage, "en-IN")}
           </p>
         )}
         <p className="text-xs text-[#61896f]">Steady trend</p>

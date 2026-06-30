@@ -8,14 +8,14 @@
  * @param {string} placeholder - Placeholder text if date is empty (default: '')
  * @returns {string} Formatted date string or placeholder
  */
-export const formatDateForDisplay = (dateString, placeholder = '') => {
-  if (!dateString) return placeholder
-  const date = new Date(dateString)
-  const day = String(date.getDate()).padStart(2, '0')
-  const month = String(date.getMonth() + 1).padStart(2, '0')
-  const year = date.getFullYear()
-  return `${month}/${day}/${year}`
-}
+export const formatDateForDisplay = (dateString, placeholder = "") => {
+  if (!dateString) return placeholder;
+  const date = new Date(dateString);
+  const day = String(date.getDate()).padStart(2, "0");
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const year = date.getFullYear();
+  return `${month}/${day}/${year}`;
+};
 
 /**
  * Format a Date object to input format (YYYY-MM-DD)
@@ -23,8 +23,38 @@ export const formatDateForDisplay = (dateString, placeholder = '') => {
  * @returns {string} Formatted date string in YYYY-MM-DD format
  */
 export const formatDateForInput = (date) => {
-  const year = date.getFullYear()
-  const month = String(date.getMonth() + 1).padStart(2, '0')
-  const day = String(date.getDate()).padStart(2, '0')
-  return `${year}-${month}-${day}`
-}
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const day = String(date.getDate()).padStart(2, "0");
+  return `${year}-${month}-${day}`;
+};
+
+// extract date and time from dateString in format 24 Jun 2026, 7:15 am
+export const formatDateTime = (dateString) => {
+  if (!dateString) {
+    return {
+      day: "",
+      time: "",
+    };
+  }
+
+  const date = new Date(dateString);
+
+  return {
+    day: new Intl.DateTimeFormat("en-IN", {
+      dateStyle: "medium",
+    }).format(date),
+
+    time: new Intl.DateTimeFormat("en-IN", {
+      timeStyle: "short",
+    }).format(date),
+  };
+};
+
+// function to format currency
+export const formatCurrency = (amount, currency) => {
+  return amount.toLocaleString(currency, {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  });
+};

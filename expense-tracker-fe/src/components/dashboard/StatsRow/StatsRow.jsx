@@ -1,5 +1,6 @@
 import React from "react";
 import { useGetExpenseStatsQuery } from "../../../redux/services/expensesApis";
+import { formatCurrency } from "../../../utils/helpers.js";
 
 const StatsRow = () => {
   const {
@@ -65,11 +66,7 @@ const StatsRow = () => {
           </span>
         </div>
         <p className="text-[#111813] dark:text-white text-2xl md:text-3xl font-extrabold">
-          ₹
-          {stats.totalSpent.toLocaleString("en-IN", {
-            minimumFractionDigits: 2,
-            maximumFractionDigits: 2,
-          })}
+           ₹{formatCurrency(stats.totalSpent, "en-IN")}
         </p>
         {/* <div className="flex items-center gap-1 mt-2">
           <span className="material-symbols-outlined text-red-500 text-sm leading-none">

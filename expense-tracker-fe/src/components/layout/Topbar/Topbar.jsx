@@ -2,12 +2,25 @@ import React, { useState, useRef } from "react";
 import useClickAwayListener from "../../../hooks/useClickAwayListener";
 import { toggleDropdown } from "./helpers";
 import ProfileDropdown from "./subcomponents/ProfileDropdown";
+import { useGetMeQuery } from "../../../redux/services/authApi";
 
 const Topbar = ({ title, onMenuClick }) => {
-  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-  const [isNotificationsOpen, setIsNotificationsOpen] = useState(false);
   const dropdownRef = useRef(null);
   const notificationsRef = useRef(null);
+
+  const {
+    data: userData,
+    isLoading,
+    isError,
+    error,
+    refetch,
+  } = useGetMeQuery();
+
+  const {firstName, lastName} = userData?.data?.user;
+  const initials = firstName[0]+lastName[0];
+
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [isNotificationsOpen, setIsNotificationsOpen] = useState(false);
 
   useClickAwayListener(
     dropdownRef,
@@ -62,11 +75,13 @@ const Topbar = ({ title, onMenuClick }) => {
               onClick={onToggleDropdown}
             >
               <div className="w-9 h-9 rounded-full flex items-center justify-center border border-[#dbe6df] bg-blue-100">
-                <p className="text-sm font-bold text-[#111813] dark:text-white leading-none">JD</p>
+                <p className="text-sm font-bold text-[#111813] dark:text-white leading-none">
+                  {initials}
+                </p>
               </div>
               <div className="hidden md:block">
                 <p className="text-sm font-bold text-[#111813] dark:text-white leading-none">
-                  John Doe
+                  {firstName} {lastName}
                 </p>
               </div>
               <span className="material-symbols-outlined text-[#61896f] text-xl">

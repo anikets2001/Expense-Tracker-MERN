@@ -78,50 +78,50 @@ export const signUp = async (req, res) => {
 
 export const signIn = async (req, res) => {
   try {
-  const { email, password } = req.body;
+    const { email, password } = req.body;
 
-  // required field validation
-  if (!email || !password) {
-    return res.status(400).json({
-      success: false,
-      message: "Email & Password are required",
-    });
-  }
+    // required field validation
+    if (!email || !password) {
+      return res.status(400).json({
+        success: false,
+        message: "Email & Password are required",
+      });
+    }
 
-  // find user and explicitly select password (since select:false in schema)
-  const user = await User.findOne({ email }).select("+password");
-  if (!user) {
-    return res.status(401).json({
-      success: false,
-      message: "Invalid email or password.",
-    });
-  }
+    // find user and explicitly select password (since select:false in schema)
+    const user = await User.findOne({ email }).select("+password");
+    if (!user) {
+      return res.status(401).json({
+        success: false,
+        message: "Invalid email or password.",
+      });
+    }
 
-  // verify password
-  const isMatch = await user.comparePassword(password);
-  if (!isMatch) {
-    return res.status(401).json({
-      success: false,
-      message: "Invalid email or password.",
-    });
-  }
+    // verify password
+    const isMatch = await user.comparePassword(password);
+    if (!isMatch) {
+      return res.status(401).json({
+        success: false,
+        message: "Invalid email or password.",
+      });
+    }
 
-  // strip password before sending response
-  user.password = undefined;
+    // strip password before sending response
+    user.password = undefined;
 
-  //sign JWT
-  const token = signToken(user._id)
+    //sign JWT
+    const token = signToken(user._id);
 
-  return res.status(200).json({
+    return res.status(200).json({
       success: true,
       message: "Logged in successfully.",
       data: { user, token },
     });
-  }catch(error){
+  } catch (error) {
     return res.status(500).json({
       success: false,
-      message: 'Internal Server Error'
-    })
+      message: "Internal Server Error",
+    });
   }
 };
 
@@ -189,4 +189,45 @@ export const getMe = async (req, res) => {
     success: true,
     data: { user: req.user },
   });
+};
+
+// @desc    Update currently authenticated user's profile
+// @route   PUT /api/auth/me
+// @access  Private
+export const updateMe = async (req, res) => {
+  try {
+    const { firstName, lastName } = req.body;
+
+    const user = await User.findByIdAndUpdate(
+      req.user.id,
+      { firstName, lastName },
+      { new: true, runValidators: true },
+    ).select("-password");
+
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: "User not found",
+      });
+    }
+
+    res.status(200).json({
+      success: true,
+      message: "Profile updated successfully",
+      data: { user },
+    });
+  } catch (error) {
+    if (error.name === "ValidationError") {
+      const messages = Object.values(error.errors).map((e) => e.message);
+      return res.status(400).json({
+        success: false,
+        message: messages.join(", "),
+      });
+    }
+
+    res.status(500).json({
+      success: false,
+      message: "Internal server error.",
+    });
+  }
 };
