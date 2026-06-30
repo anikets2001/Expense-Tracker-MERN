@@ -1,8 +1,32 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
+import { useUpdateMeMutation } from '../../../redux/services/authApi'
 
-// NOTE: Design-only — no upload/save logic wired up yet.
 const EditProfileModal = ({ isOpen, onClose, user }) => {
+  const [updateMe, { isLoading, error }] = useUpdateMeMutation()
+  const [formData, setFormData] = useState({ firstName: '', lastName: '' })
+
+  // Reset the form to the latest user data each time the modal opens.
+  useEffect(() => {
+    if (isOpen) {
+      setFormData({ firstName: user.firstName, lastName: user.lastName })
+    }
+  }, [isOpen, user])
+
   if (!isOpen) return null
+
+  const handleChange = (e) => {
+    setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }))
+  }
+
+  const handleSubmit = async (e) => {
+    e.preventDefault()
+    try {
+      await updateMe(formData).unwrap()
+      onClose()
+    } catch {
+      // error is surfaced below via the mutation's `error` state
+    }
+  }
 
   return (
     <div
@@ -29,22 +53,36 @@ const EditProfileModal = ({ isOpen, onClose, user }) => {
         </div>
 
         {/* Body */}
-        <form className="p-6 space-y-5">
+        <form id="edit-profile-form" onSubmit={handleSubmit} className="p-6 space-y-5">
+          {error && (
+            <p className="text-sm font-medium text-red-500 bg-red-500/10 rounded-lg px-3 py-2">
+              {error?.data?.message || 'Failed to update profile. Please try again.'}
+            </p>
+          )}
+
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-1.5">
               <label className="text-sm font-bold text-[#111813] dark:text-white">First Name</label>
               <input
                 type="text"
-                defaultValue={user.firstName}
-                className="w-full px-4 py-3 bg-[#f0f4f2] dark:bg-[#1a2e1e] border border-[#dbe6df] dark:border-[#2a3a2e] rounded-lg focus:ring-2 focus:ring-primary focus:border-primary transition-all text-[#111813] dark:text-white"
+                name="firstName"
+                value={formData.firstName}
+                onChange={handleChange}
+                disabled={isLoading}
+                required
+                className="w-full px-4 py-3 bg-[#f0f4f2] dark:bg-[#1a2e1e] border border-[#dbe6df] dark:border-[#2a3a2e] rounded-lg focus:ring-2 focus:ring-primary focus:border-primary transition-all text-[#111813] dark:text-white disabled:opacity-60"
               />
             </div>
             <div className="space-y-1.5">
               <label className="text-sm font-bold text-[#111813] dark:text-white">Last Name</label>
               <input
                 type="text"
-                defaultValue={user.lastName}
-                className="w-full px-4 py-3 bg-[#f0f4f2] dark:bg-[#1a2e1e] border border-[#dbe6df] dark:border-[#2a3a2e] rounded-lg focus:ring-2 focus:ring-primary focus:border-primary transition-all text-[#111813] dark:text-white"
+                name="lastName"
+                value={formData.lastName}
+                onChange={handleChange}
+                disabled={isLoading}
+                required
+                className="w-full px-4 py-3 bg-[#f0f4f2] dark:bg-[#1a2e1e] border border-[#dbe6df] dark:border-[#2a3a2e] rounded-lg focus:ring-2 focus:ring-primary focus:border-primary transition-all text-[#111813] dark:text-white disabled:opacity-60"
               />
             </div>
           </div>
@@ -58,7 +96,8 @@ const EditProfileModal = ({ isOpen, onClose, user }) => {
               <input
                 type="email"
                 defaultValue={user.email}
-                className="w-full pl-10 pr-4 py-3 bg-[#f0f4f2] dark:bg-[#1a2e1e] border border-[#dbe6df] dark:border-[#2a3a2e] rounded-lg focus:ring-2 focus:ring-primary focus:border-primary transition-all text-[#111813] dark:text-white"
+                readOnly
+                className="cursor-not-allowed w-full pl-10 pr-4 py-3 bg-[#f0f4f2] dark:bg-[#1a2e1e] border border-[#dbe6df] dark:border-[#2a3a2e] rounded-lg text-[#111813] dark:text-white"
               />
             </div>
           </div>
@@ -91,16 +130,19 @@ const EditProfileModal = ({ isOpen, onClose, user }) => {
           <button
             type="button"
             onClick={onClose}
-            className="cursor-pointer px-4 py-2.5 text-sm font-medium rounded-lg text-[#61896f] hover:bg-[#f0f4f2] dark:hover:bg-[#1a2e1e] transition-colors border border-[#dbe6df] dark:border-[#2a3a2e]"
+            disabled={isLoading}
+            className="cursor-pointer px-4 py-2.5 text-sm font-medium rounded-lg text-[#61896f] hover:bg-[#f0f4f2] dark:hover:bg-[#1a2e1e] transition-colors border border-[#dbe6df] dark:border-[#2a3a2e] disabled:opacity-60"
           >
             Cancel
           </button>
           <button
             type="submit"
-            className="cursor-pointer px-5 py-2.5 text-sm font-bold rounded-lg bg-primary text-black hover:opacity-90 transition-opacity shadow-lg shadow-primary/20 flex items-center gap-2"
+            form="edit-profile-form"
+            disabled={isLoading}
+            className="cursor-pointer px-5 py-2.5 text-sm font-bold rounded-lg bg-primary text-black hover:opacity-90 transition-opacity shadow-lg shadow-primary/20 flex items-center gap-2 disabled:opacity-60"
           >
             <span className="material-symbols-outlined text-lg">check</span>
-            Save Changes
+            {isLoading ? 'Saving...' : 'Save Changes'}
           </button>
         </div>
       </div>

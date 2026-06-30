@@ -4,6 +4,7 @@ import { baseQueryWithAuth } from "./baseQueryWithAuth";
 export const authApi = createApi({
   reducerPath: "authApi",
   baseQuery: baseQueryWithAuth,
+  tagTypes: ['User'],
 
   endpoints: (build) => ({
     // create new user
@@ -30,8 +31,17 @@ export const authApi = createApi({
     }),
     getMe: build.query({
       query: () => '/auth/me',
+      providesTags: ['User'],
     }),
+    updateMe: build.mutation({
+      query: (updatedProfile) => ({
+        url: '/auth/me',
+        method:  'PUT',
+        body: updatedProfile
+      }),
+      invalidatesTags: ['User'],
+    })
   })
 });
 
-export const {useCreateUserMutation, useSignInMutation, useGoogleSignInMutation, useGetMeQuery}  = authApi
+export const {useCreateUserMutation, useSignInMutation, useGoogleSignInMutation, useGetMeQuery, useUpdateMeMutation}  = authApi
