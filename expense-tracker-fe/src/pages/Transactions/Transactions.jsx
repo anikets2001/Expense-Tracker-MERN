@@ -7,12 +7,31 @@ import Sidebar from '../../components/layout/Sidebar/Sidebar'
 import Topbar from '../../components/layout/Topbar/Topbar'
 import { useGetExpenseStatsQuery } from '../../redux/services/expensesApis'
 
+const getMonthDateRange = () => {
+  const now = new Date()
+  const year = now.getFullYear()
+  const month = now.getMonth() + 1 // 1-indexed
+  const lastDay = new Date(now.getFullYear(), now.getMonth() + 1, 0).getDate()
+  const pad = (n) => String(n).padStart(2, '0')
+  return {
+    startDate: `${year}-${pad(month)}-01`,
+    endDate: `${year}-${pad(month)}-${pad(lastDay)}`
+  }
+}
+
 const Transactions = () => {
   const { data, isLoading: isLoadingStats, error: errorStats } = useGetExpenseStatsQuery()
+  const monthRange = useMemo(() => getMonthDateRange(), [])
+  const { data: monthlyData, isLoading: isLoadingMonthly, error: errorMonthly } = useGetExpenseStatsQuery(monthRange)
 
   const stats = data?.data || {
     totalSpent: 0,
     transactionCount: 0,
+    dailyAverage: 0
+  }
+
+  const monthlyStats = monthlyData?.data || {
+    totalSpent: 0,
     dailyAverage: 0
   }
 
@@ -83,7 +102,12 @@ const Transactions = () => {
         <Topbar title={'Transactions'} onMenuClick={() => setIsSidebarOpen(true)} />
         <PageHeading transactionCount={stats.transactionCount} />
         <div className="px-4 md:px-6 lg:px-8 pb-4 md:pb-6 lg:pb-8 space-y-4 md:space-y-6">
-          <Stats stats={stats} isLoading={isLoadingStats} error={errorStats}/>
+          <Stats
+            stats={stats}
+            monthlyStats={monthlyStats}
+            isLoading={isLoadingStats || isLoadingMonthly}
+            error={errorStats || errorMonthly}
+          />
           <Filters 
             search={searchInput}
             onSearchChange={setSearchInput}
