@@ -1,69 +1,63 @@
 import React from "react";
 import { formatCurrency } from "../../../utils/helpers.js";
 
-const Stats = ({ stats, isLoading, error }) => {
+const StatCard = ({ label, icon, value, subtext, isLoading, error }) => (
+  <div className="flex min-w-[150px] sm:min-w-[180px] flex-1 flex-col gap-2 rounded-xl p-4 md:p-6 border border-[#dbe6df] dark:border-white/10 bg-white dark:bg-[#102216]">
+    <div className="flex justify-between items-start">
+      <p className="text-[#61896f] text-sm font-medium">{label}</p>
+      <span className="material-symbols-outlined text-[#111813] dark:text-white opacity-20">
+        {icon}
+      </span>
+    </div>
+    {isLoading ? (
+      <div className="h-8 w-24 bg-gray-200 dark:bg-gray-700 animate-pulse rounded"></div>
+    ) : error ? (
+      <p className="text-2xl md:text-3xl font-bold tracking-tight text-red-500">Error</p>
+    ) : (
+      <p className="text-[#111813] dark:text-white text-2xl md:text-3xl font-bold tracking-tight">
+        {value}
+      </p>
+    )}
+    {subtext && <p className="text-xs text-[#61896f]">{subtext}</p>}
+  </div>
+);
+
+const now = new Date();
+const currentMonthLabel = now.toLocaleString("en-IN", { month: "long", year: "numeric" });
+
+const Stats = ({ stats, monthlyStats, isLoading, error }) => {
   return (
     <div className="flex flex-wrap gap-3 md:gap-4">
-      <div className="flex min-w-[150px] sm:min-w-[200px] flex-1 flex-col gap-2 rounded-xl p-4 md:p-6 border border-[#dbe6df] dark:border-white/10 bg-white dark:bg-[#102216]">
-        <div className="flex justify-between items-start">
-          <p className="text-[#61896f] text-sm font-medium">Total Spent</p>
-          <span className="material-symbols-outlined text-[#111813] dark:text-white opacity-20">
-            payments
-          </span>
-        </div>
-        {isLoading ? (
-          <div className="h-8 w-24 bg-gray-200 dark:bg-gray-700 animate-pulse rounded"></div>
-        ) : error ? (
-          <p className="text-[#111813] dark:text-white text-2xl md:text-3xl font-bold tracking-tight text-red-500">
-            Error
-          </p>
-        ) : (
-          <p className="text-[#111813] dark:text-white text-2xl md:text-3xl font-bold tracking-tight">
-             ₹{formatCurrency(stats.totalSpent, "en-IN")}
-          </p>
-        )}
-        {/* <p className="text-xs text-red-500 font-medium">+12% from last month</p> */}
-      </div>
-      <div className="flex min-w-[200px] flex-1 flex-col gap-2 rounded-xl p-6 border border-[#dbe6df] dark:border-white/10 bg-white dark:bg-[#102216]">
-        <div className="flex justify-between items-start">
-          <p className="text-[#61896f] text-sm font-medium">Transactions</p>
-          <span className="material-symbols-outlined text-[#111813] dark:text-white opacity-20">
-            list_alt
-          </span>
-        </div>
-        {isLoading ? (
-          <div className="h-8 w-16 bg-gray-200 dark:bg-gray-700 animate-pulse rounded"></div>
-        ) : error ? (
-          <p className="text-[#111813] dark:text-white text-2xl md:text-3xl font-bold tracking-tight text-red-500">
-            Error
-          </p>
-        ) : (
-          <p className="text-[#111813] dark:text-white text-2xl md:text-3xl font-bold tracking-tight">
-            {stats.transactionCount.toLocaleString("en-IN")}
-          </p>
-        )}
-        {/* <p className="text-xs text-[#13ec5b] font-medium">-4% from last month</p> */}
-      </div>
-      <div className="flex min-w-[200px] flex-1 flex-col gap-2 rounded-xl p-6 border border-[#dbe6df] dark:border-white/10 bg-white dark:bg-[#102216]">
-        <div className="flex justify-between items-start">
-          <p className="text-[#61896f] text-sm font-medium">Daily Average</p>
-          <span className="material-symbols-outlined text-[#111813] dark:text-white opacity-20">
-            analytics
-          </span>
-        </div>
-        {isLoading ? (
-          <div className="h-8 w-24 bg-gray-200 dark:bg-gray-700 animate-pulse rounded"></div>
-        ) : error ? (
-          <p className="text-[#111813] dark:text-white text-2xl md:text-3xl font-bold tracking-tight text-red-500">
-            Error
-          </p>
-        ) : (
-          <p className="text-[#111813] dark:text-white text-2xl md:text-3xl font-bold tracking-tight">
-             ₹{formatCurrency(stats.dailyAverage, "en-IN")}
-          </p>
-        )}
-        <p className="text-xs text-[#61896f]">Steady trend</p>
-      </div>
+      <StatCard
+        label={`Monthly Spending (${currentMonthLabel})`}
+        icon="calendar_month"
+        value={`₹${formatCurrency(monthlyStats.totalSpent, "en-IN")}`}
+        subtext="Resets on the 1st of each month"
+        isLoading={isLoading}
+        error={error}
+      />
+      <StatCard
+        label="Total Spending"
+        icon="payments"
+        value={`₹${formatCurrency(stats.totalSpent, "en-IN")}`}
+        isLoading={isLoading}
+        error={error}
+      />
+      <StatCard
+        label="Transactions"
+        icon="list_alt"
+        value={stats.transactionCount.toLocaleString("en-IN")}
+        isLoading={isLoading}
+        error={error}
+      />
+      <StatCard
+        label={`Monthly Average (${currentMonthLabel})`}
+        icon="analytics"
+        value={`₹${formatCurrency(monthlyStats.dailyAverage, "en-IN")}`}
+        subtext="Daily average this month"
+        isLoading={isLoading}
+        error={error}
+      />
     </div>
   );
 };

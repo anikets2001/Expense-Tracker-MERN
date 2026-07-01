@@ -59,7 +59,7 @@ const StatsRow = () => {
       <div className="bg-white dark:bg-black p-6 rounded-xl border border-[#dbe6df] dark:border-[#2a3a2e] shadow-sm flex flex-col gap-2">
         <div className="flex justify-between items-start">
           <p className="text-[#61896f] text-sm font-semibold uppercase tracking-wider">
-            Monthly Spending
+            Total Spending
           </p>
           <span className="material-symbols-outlined text-red-500 bg-red-500/10 p-1.5 rounded-lg">
             payments
